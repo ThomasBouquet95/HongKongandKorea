@@ -25,6 +25,7 @@ over HTTPS and install it to the home screen.
 | **Filters** | All · Must · Eat & drink · Saved · To do — applied to the list and the map together. |
 | **Progress** | Tap a stop's number to mark it done. Progress shows per day in the day strip, the header and the bottom bar. |
 | **Favourites** | Star any stop; the star button in the header lists them grouped by day and jumps straight to them. |
+| **Programme in text** | A full-page plain-text version of the whole trip, behind the document icon in the header or the `P` key. **Tout copier** puts all 15 days on the clipboard as a hard-wrapped 76-column text file; each day and the overview also have their own Copier button. |
 | **Practical sheet** | Flights, the KTX ticket, hotels, and a checklist of what still needs booking (Gyeongbokgung night visit first) plus the Hong Kong things-to-taste list. |
 | **Offline** | Service worker caches the app shell and the Leaflet library; map tiles are cached as you browse them. The full itinerary works with no connection. |
 
@@ -89,6 +90,19 @@ poho: { name:'PoHo',
 ```
 
 Keep `h + t + n` between 80 and 120 words — the sheet is designed around that length.
+
+## Keeping the text page in sync
+
+The text page is **generated from `TRIP` and `AREAS` at render time** — it is never
+hand-written and there is no second copy of the itinerary to maintain. Edit
+`assets/js/data.js` and the text page, the copied file, the timeline, the map and
+the briefing all change together. Adding a new field to a stop is the only case
+that needs a second edit: teach `tokDay()` in `assets/js/app.js` to emit it.
+
+The generator emits tokens rather than strings, which is what lets one source
+produce two outputs: the page renders them with CSS hanging indents so long notes
+reflow properly on a phone, and `toText()` renders the same tokens as a 76-column
+text file for the clipboard.
 
 ## Colour
 

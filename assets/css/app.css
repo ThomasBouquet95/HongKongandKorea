@@ -506,3 +506,96 @@ body.mapfull .mapdock::-webkit-scrollbar{display:none}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+/* ── programme in plain text ─────────────────────────────────────────── */
+body.progopen{overflow:hidden}
+.progpage{
+  position:fixed;inset:0;z-index:930;overflow-y:auto;background:var(--bg);
+  -webkit-overflow-scrolling:touch
+}
+.progpage[hidden]{display:none}
+.prog-top{
+  position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;
+  padding:calc(8px + env(safe-area-inset-top)) 12px 8px;
+  background:color-mix(in srgb,var(--bg) 90%,transparent);
+  backdrop-filter:saturate(180%) blur(16px);-webkit-backdrop-filter:saturate(180%) blur(16px);
+  border-bottom:1px solid var(--line)
+}
+.prog-h{flex:1;min-width:0}
+.prog-h b{display:block;font-size:13.5px;font-weight:600;letter-spacing:-.005em}
+.prog-h span{display:block;font-size:11px;color:var(--ink-3);letter-spacing:.05em;text-transform:uppercase;font-weight:600;margin-top:1px}
+.prog-copy{
+  flex:none;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;
+  border-radius:8px;background:var(--ink);color:var(--bg);font-size:12.5px;font-weight:560
+}
+.prog-copy .ico{width:13px;height:13px;color:var(--bg)}
+.prog-copy:active{transform:scale(.97)}
+.prog-copy.sm{
+  height:26px;padding:0 9px;font-size:11.5px;font-weight:540;
+  background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line)
+}
+.prog-copy.sm .ico{width:12px;height:12px;color:var(--ink-3)}
+
+.prog-body{max-width:820px;margin:0 auto;padding:14px 12px calc(40px + env(safe-area-inset-bottom))}
+.progcard{
+  border:1px solid var(--line);border-radius:var(--r);background:var(--surface);
+  overflow:hidden;margin-bottom:12px
+}
+.progcard-h{
+  display:flex;align-items:center;gap:10px;padding:9px 11px;
+  border-bottom:1px solid var(--line-2);
+  background:var(--surface-2)
+}
+.progcard-h h3{
+  flex:1;min-width:0;margin:0;font-size:11px;font-weight:700;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--ink-2);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap
+}
+.progtxt{
+  padding:12px 13px 16px;font-size:12.5px;line-height:1.6;color:var(--ink-2);
+  font-variant-numeric:tabular-nums;overflow-wrap:break-word
+}
+/* hanging indents, so a wrapped line stays inside its own column */
+.progtxt .ptxt{padding-left:var(--d,0)}
+.progtxt .ptxt.hang{text-indent:calc(-1 * var(--d,0))}
+.progtxt .d2{--d:1.1em}
+.progtxt .d3{--d:1.6em}
+.progtxt .bang{color:var(--accent);font-weight:700;margin-right:.5em}
+.progtxt .d4{--d:2.2em}
+.progtxt .d6{--d:3.2em}
+.progtxt .pgap{height:.62em}
+.progtxt .prule{height:1px;background:var(--line);margin:.5em 0}
+.progtxt .ptitle{
+  color:var(--ink);font-weight:640;font-size:13px;letter-spacing:-.005em;
+  padding-left:0;text-indent:0
+}
+.progtxt .psec{
+  margin-top:.2em;font-size:10px;font-weight:700;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-3)
+}
+.progtxt .pkv{display:flex;gap:8px;align-items:baseline}
+.progtxt .pkv b{
+  flex:none;width:6.6em;font-size:9.5px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--accent);line-height:1.9
+}
+.progtxt .pkv span{flex:1;min-width:0}
+.progtxt .pstop{display:flex;gap:7px;align-items:baseline;margin-top:.15em}
+.progtxt .pstop b{
+  flex:none;width:1.9em;text-align:right;font-weight:600;color:var(--ink-3);
+  font-size:11.5px
+}
+.progtxt .pstop span{flex:1;min-width:0;color:var(--ink);font-weight:530}
+.progtxt .pstop i{
+  font-style:normal;font-weight:700;font-size:11px;color:var(--accent);
+  margin-right:6px;letter-spacing:.02em
+}
+.progtxt .pstop em{
+  font-style:normal;font-size:9px;font-weight:700;letter-spacing:.09em;
+  color:var(--ink-3);white-space:nowrap
+}
+
+@media (min-width:900px){
+  .prog-top{padding:14px 22px}
+  .prog-body{padding:18px 22px 60px}
+  .progtxt{font-size:13px;padding:14px 16px 18px}
+}

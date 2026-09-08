@@ -84,6 +84,7 @@ const S = {
 
 const els = {};
 ['daystrip','dayhead','filters','timeline','mapcard','map','mapdock','maplegend','laneB',
+ 'progpage','progBody','progSub','progClose','progCopyAll','btnText',
  'btnPrev','btnNext','btnToday','btnInfo','btnSaved','btnFull','btnFit','bbTitle','bbSub','bbBar',
  'scrim','sheet','sheetBody','sheetTitle','btnSheetClose','toast','brandSub']
  .forEach(id => els[id] = document.getElementById(id));
@@ -632,6 +633,171 @@ function savedSheet(){
   openSheet('Favoris', groups || `<div class="sheet-s"><p class="tip">Aucun favori pour l’instant. Tap l’étoile d’une étape pour l’enregistrer ici.</p></div>`);
 }
 
+/* ───────────────────────────────────────────────────────────────────────
+   Programme in plain text.
+
+   Built from TRIP and AREAS, never hand-written, so it cannot drift out of
+   sync when the itinerary changes — edit assets/js/data.js and this page
+   follows. The generator emits tokens; the page renders them with CSS
+   hanging indents so they reflow on a phone, and the copy button turns the
+   same tokens into a hard-wrapped 76-column text file.
+   ─────────────────────────────────────────────────────────────────────── */
+const TXTW = 76, KW = 13;
+
+/* Wraps on single spaces rather than /\s+/, so runs of spaces used for
+   column alignment survive the wrap. */
+function wrapAt(text, indent, width){
+  const pad = ' '.repeat(indent), out = [];
+  let line = '';
+  String(text).replace(/\s*\n\s*/g, ' ').split(' ').forEach(w => {
+    if (line !== '' && indent + line.length + 1 + w.length > width){ out.push((pad + line).trimEnd()); line = w; }
+    else line = line === '' ? w : line + ' ' + w;
+  });
+  out.push((pad + line).trimEnd());
+  return out;
+}
+/* First line carries `prefix`, wrapped lines hang under it. */
+function hang(prefix, text){
+  const lines = wrapAt(text, prefix.length, TXTW);
+  lines[0] = (prefix + lines[0].slice(prefix.length)).trimEnd();
+  return lines;
+}
+
+/* tokens → the plain-text file */
+function toText(tok){
+  const L = [];
+  tok.forEach(t => {
+    if (t.k === 'gap')        L.push('');
+    else if (t.k === 'rule')  L.push('='.repeat(TXTW));
+    else if (t.k === 'title') L.push(t.v);
+    else if (t.k === 'sec')   L.push(t.v);
+    else if (t.k === 'kv')    L.push(...hang((t.a + ' :').padEnd(KW), t.b));
+    else if (t.k === 'stop')  L.push(...hang(`${String(t.n).padStart(2)}. `,
+        `${t.t ? t.t + '  ' : ''}${t.name}${t.chips ? '  [' + t.chips + ']' : ''}`));
+    else if (t.k === 'txt')   L.push(...(t.pre ? hang(t.pre, t.v) : wrapAt(t.v, t.d || 0, TXTW)));
+  });
+  return L.join('\n');
+}
+
+/* tokens → the page */
+function toHTML(tok){
+  return tok.map(t => {
+    if (t.k === 'gap')   return '<div class="pgap"></div>';
+    if (t.k === 'rule')  return '<div class="prule"></div>';
+    if (t.k === 'title') return `<div class="ptitle">${esc(t.v)}</div>`;
+    if (t.k === 'sec')   return `<div class="psec">${esc(t.v)}</div>`;
+    if (t.k === 'kv')    return `<div class="pkv"><b>${esc(t.a)}</b><span>${esc(t.b)}</span></div>`;
+    if (t.k === 'stop')  return `<div class="pstop"><b>${t.n}.</b><span>${
+        t.t ? `<i>${esc(t.t)}</i>` : ''}${esc(t.name)}${
+        t.chips ? ` <em>${esc(t.chips)}</em>` : ''}</span></div>`;
+    return `<div class="ptxt d${t.d || 0}${t.pre ? ' hang' : ''}">${
+      t.pre ? `<b class="bang">${esc(t.pre.trim())}</b>` : ''}${esc(t.v)}</div>`;
+  }).join('');
+}
+
+function tokHead(){
+  const T = [{ k:'rule' }, { k:'title', v: TRIP.title.toUpperCase() },
+             { k:'txt', v:'21 septembre – 5 octobre 2026' }, { k:'rule' }, { k:'gap' },
+             { k:'sec', v:'HÔTELS' }];
+  TRIP.hotels.forEach(h => {
+    T.push({ k:'txt', d:2, v:`${h.name} — ${h.city}, ${h.area}` });
+    T.push({ k:'txt', d:4, v:h.dates });
+  });
+  T.push({ k:'gap' }, { k:'sec', v:'VOLS & TRAIN' });
+  TRIP.flights.forEach(f => {
+    T.push({ k:'txt', d:2, v:`${f.code} — ${f.from} → ${f.to}` });
+    T.push({ k:'txt', d:4, v:`${f.dep} → ${f.arr} · ${f.dur}` });
+    T.push({ k:'txt', d:4, v:`${f.cls} · ${f.bag}` });
+    T.push({ k:'txt', d:4, v:f.op });
+  });
+  T.push({ k:'gap' }, { k:'sec', v:'À RÉSERVER' });
+  TRIP.priorities.forEach(x => {
+    T.push({ k:'txt', d:2, v:`[ ] ${x.label}` });
+    T.push({ k:'txt', d:6, v:x.note });
+  });
+  T.push({ k:'gap' }, { k:'sec', v:'À GOÛTER À HONG KONG' });
+  TRIP.tastings.forEach(x => T.push({ k:'txt', d:2, v:`[ ] ${x.label}` }));
+  return T;
+}
+
+const dayHeadline = d => `JOUR ${d.i + 1} · ${fmtLong(d.date).toUpperCase()} — ${d.label}`;
+
+function tokDay(d, withHead){
+  const T = [];
+  if (withHead) T.push({ k:'title', v: dayHeadline(d) }, { k:'rule' });
+  const h = d.hotel != null ? TRIP.hotels[d.hotel] : null;
+  T.push({ k:'txt', v:`${d.city}${h ? ' · ' + h.name : ''}` });
+  if (d.focus) T.push({ k:'txt', v:d.focus });
+  if (d.alert) T.push({ k:'gap' }, { k:'txt', d:3, pre:'!  ', v:d.alert });
+  const br = [];
+  if (d.must)                      br.push(['Must do', d.must]);
+  if (d.book && d.book.length)     br.push(['Must book', d.book.join(' · ')]);
+  if (d.drop && d.drop.length)     br.push(['Drop first', d.drop.join(' · ')]);
+  if (d.tip)                       br.push(['Transport', d.tip]);
+  if (d.checks && d.checks.length) br.push(['Before', d.checks.map(c => c.t).join(' · ')]);
+  if (br.length){ T.push({ k:'gap' }); br.forEach(([a, b]) => T.push({ k:'kv', a, b })); }
+
+  /* one area sentence per area, on a place stop where the day has one */
+  const leads = new Set(), byArea = new Map();
+  d.stops.forEach(st => {
+    if (!st.a || !AREAS[st.a]) return;
+    if (!byArea.has(st.a)) byArea.set(st.a, []);
+    byArea.get(st.a).push(st);
+  });
+  byArea.forEach(g => leads.add((g.find(isPlace) || g[0]).id));
+
+  SLOTS.forEach(([slot, label]) => {
+    const g = d.stops.filter(st => st.s === slot);
+    if (!g.length) return;
+    T.push({ k:'gap' }, { k:'sec', v:label.toUpperCase() });
+    g.forEach(st => {
+      T.push({ k:'stop', n:st.n, t:st.t, name:st.name,
+               chips: chipsFor(st).map(([l]) => l.toUpperCase()).join(' · ') });
+      if (leads.has(st.id)) T.push({ k:'txt', d:4, v:'› ' + AREAS[st.a].one });
+      if (st.note)  T.push({ k:'txt', d:4, v:st.note });
+      if (st.plans) st.plans.forEach(pl => T.push({ k:'txt', d:4, v:`${pl.k} — ${pl.d}` }));
+    });
+  });
+  return T;
+}
+
+const txtAll = () =>
+  [toText(tokHead()), ...TRIP.days.map(d => toText(tokDay(d, true)))].join('\n\n\n');
+
+function paintProgramme(){
+  const blocks = [
+    { id:'head', title:'Vue d’ensemble', tok: tokHead(), copy: tokHead() },
+    ...TRIP.days.map(d => ({ id:'d' + d.i, title: dayHeadline(d),
+                             tok: tokDay(d, false), copy: tokDay(d, true) }))
+  ];
+  els.progSub.textContent =
+    `${TRIP.days.length} jours · ${TRIP.days.reduce((a, d) => a + d.stops.length, 0)} étapes`;
+  els.progBody.innerHTML = blocks.map(b => `
+    <article class="progcard">
+      <div class="progcard-h">
+        <h3>${esc(b.title)}</h3>
+        <button class="prog-copy sm" data-copyblock="${b.id}">${icon('i-copy')}Copier</button>
+      </div>
+      <div class="progtxt">${toHTML(b.tok)}</div>
+    </article>`).join('');
+  const map = Object.fromEntries(blocks.map(b => [b.id, toText(b.copy)]));
+  $$('[data-copyblock]', els.progBody).forEach(btn => btn.addEventListener('click', async () => {
+    const ok = await copyText(map[btn.dataset.copyblock]);
+    buzz(8); toast(ok ? 'Copié' : 'Copie impossible');
+  }));
+}
+
+function openProgramme(){
+  paintProgramme();
+  els.progpage.hidden = false;
+  document.body.classList.add('progopen');
+  els.progpage.scrollTop = 0;
+}
+function closeProgramme(){
+  els.progpage.hidden = true;
+  document.body.classList.remove('progopen');
+}
+
 /* ── events ──────────────────────────────────────────────────────────── */
 els.timeline.addEventListener('click', async e => {
   const cp = e.target.closest('[data-copy]');
@@ -663,12 +829,25 @@ els.btnFit.addEventListener('click', () => {
 });
 els.btnInfo.addEventListener('click', infoSheet);
 els.btnSaved.addEventListener('click', savedSheet);
+els.btnText.addEventListener('click', openProgramme);
+els.progClose.addEventListener('click', closeProgramme);
+els.progCopyAll.addEventListener('click', async () => {
+  const ok = await copyText(txtAll());
+  buzz(12);
+  toast(ok ? 'Programme complet copié' : 'Copie impossible');
+});
 els.btnSheetClose.addEventListener('click', closeSheet);
 els.scrim.addEventListener('click', closeSheet);
 
 document.addEventListener('keydown', e => {
   if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
-  if (e.key === 'Escape'){ if (els.sheet.classList.contains('on')) closeSheet(); else if (S.full) setFull(false); else select(null); }
+  if (e.key === 'Escape'){
+    if (els.sheet.classList.contains('on')) closeSheet();
+    else if (!els.progpage.hidden) closeProgramme();
+    else if (S.full) setFull(false);
+    else select(null);
+  }
+  else if (e.key === 'p' || e.key === 'P'){ els.progpage.hidden ? openProgramme() : closeProgramme(); }
   else if (e.key === 'ArrowRight') go(S.di + 1);
   else if (e.key === 'ArrowLeft')  go(S.di - 1);
   else if (e.key === 'f' || e.key === 'F') setFull(!S.full);
@@ -679,7 +858,7 @@ document.addEventListener('keydown', e => {
 /* swipe between days */
 (() => {
   let x0 = null, y0 = null, t0 = 0, lock = null;
-  const guard = t => t.closest('#map, .mapdock, .daystrip, .filters, .sheet, .leaflet-container');
+  const guard = t => t.closest('#map, .mapdock, .daystrip, .filters, .sheet, .progpage, .leaflet-container');
   document.addEventListener('touchstart', e => {
     if (e.touches.length !== 1 || guard(e.target) || S.full) { x0 = null; return; }
     x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; t0 = Date.now(); lock = null;
