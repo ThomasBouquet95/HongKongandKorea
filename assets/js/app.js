@@ -586,9 +586,9 @@ function areaSheet(id){
   openSheet(a.name, `
     <div class="sheet-s"><p class="lede">${esc(a.one)}</p></div>
     <div class="sheet-s"><div class="card">
-      <div class="row"><span class="k">Histoire</span><span class="v">${esc(a.h)}</span></div>
-      <div class="row"><span class="k">Aujourd’hui</span><span class="v">${esc(a.t)}</span></div>
-      <div class="row"><span class="k">À remarquer</span><span class="v">${esc(a.n)}</span></div>
+      <div class="arow"><h4>Histoire</h4><p>${esc(a.h)}</p></div>
+      <div class="arow"><h4>Aujourd’hui</h4><p>${esc(a.t)}</p></div>
+      <div class="arow"><h4>À remarquer</h4><p>${esc(a.n)}</p></div>
     </div></div>`);
 }
 

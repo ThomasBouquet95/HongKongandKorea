@@ -17,7 +17,7 @@ over HTTPS and install it to the home screen.
 | **Smart framing** | Airports and cross-country legs are grouped out of the default fit, so a 30 km outlier doesn't flatten the day. The crosshair button lights up when stops sit outside the view and toggles between the main area and all points. |
 | **Navigation, per country** | Hong Kong leads with **Google Maps**. Korea leads with **Naver Map**, Google Maps kept alongside it. Shenzhen has no usable Western map, so the primary actions are **DiDi** and **Alipay**: they copy the stop's Chinese name to the clipboard to paste as the destination, with **Baidu** to look the place up. |
 | **Day briefing** | Every day carries compact one-line rows above the map — **Must do**, **Must book**, **Drop first if late**, **Transport tip** — plus an accent banner on the days that need one (the Fire Dragon window, the 30 Sep clock, the Gyeongbokgung ticket situation, the 3 Oct public holiday, the fixed 15:30 airport departure). Tap the card to expand. Shenzhen adds a **Before** row of tappable checks: passport, visa, Alipay, WeChat Pay, card, eSIM, VPN, cash. |
-| **Neighbourhood context** | 43 neighbourhoods carry pre-written context **in French**, so it works offline. The first stop in each area shows a one-sentence explanation under its name; opening the stop reveals **Understand this area →**, a sheet with Histoire, Aujourd’hui and À remarquer — 80–120 words each, checked programmatically. Repeats are suppressed — three stops in Sham Shui Po show the sentence once. |
+| **Neighbourhood context** | 43 neighbourhoods carry pre-written context **in French**, so it works offline. The first stop in each area shows a one-sentence explanation under its name; opening the stop reveals **Understand this area →**, a sheet with Histoire, Aujourd’hui and À remarquer — 170–240 words each, checked programmatically, laid out as full-width paragraphs. Repeats are suppressed — three stops in Sham Shui Po show the sentence once. Facts were verified against online sources; see the commit history for what was corrected. |
 | **Places vs services** | Stops you go to *see* — neighbourhoods, sights, viewpoints, museums, nature, markets — get a light indigo wash across the whole row, a filled indigo number and a filled indigo map pin. Restaurants, cafés, bars, shops, hotels and transit stay neutral, so a temple never looks like a cocktail bar and you can find the day's activities without reading. 65 of 169 stops are places. |
 | **Status chips** | **Hard must** · **Must** · **Optional** · **To book** · **Booked** · **Weather dependent** · **Hard deadline**, so the ones you cannot move look different from the ones you can. |
 | **Real POIs only** | Stops that are genuine addresses get a pin and turn-by-turn navigation. Generic ones — “Dîner à Euljiro”, “Cheongsapo seafood” — are flagged `gen`: dotted pin, an explicit *recommandation de zone* note, and an area search instead of navigation to an invented point. |
@@ -91,7 +91,7 @@ poho: { name:'PoHo',
   h:'History', t:'Why it feels this way today', n:'What to notice' }
 ```
 
-Keep `h + t + n` between 80 and 120 words — the sheet is designed around that length.
+Keep `h + t + n` between 170 and 240 words — the sheet is designed around that length.
 
 ## Keeping the text page in sync
 

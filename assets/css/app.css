@@ -465,6 +465,14 @@ body.mapfull .mapdock::-webkit-scrollbar{display:none}
   color:var(--ink);letter-spacing:-.005em
 }
 .sheet-s .row .k{width:76px}
+/* Long-form neighbourhood text: label above, full width for the paragraph */
+.arow{padding:12px 13px 13px;border-top:1px solid var(--line-2)}
+.arow:first-child{border-top:0}
+.arow h4{
+  margin:0 0 5px;font-size:9.5px;font-weight:700;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--accent)
+}
+.arow p{margin:0;font-size:13.5px;line-height:1.62;color:var(--ink-2)}
 .tip{font-size:12px;color:var(--ink-3);line-height:1.6;padding:10px 4px 0}
 .tip kbd{font:inherit;font-size:11px;border:1px solid var(--line);border-radius:4px;padding:1px 4px;background:var(--surface)}
 .danger{color:var(--accent);font-weight:600}
