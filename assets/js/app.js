@@ -28,6 +28,19 @@ const DOW = ['dim','lun','mar','mer','jeu','ven','sam'];
 const DOW_L = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
 const FOODY = new Set(['food','cafe','bar','market']);
 
+/* Status chips, in the order they read best on one line. */
+function chipsFor(st){
+  const c = [];
+  if (st.hard)          c.push(['Hard must','hard']);
+  else if (st.m)        c.push(['Must','must']);
+  if (st.o)             c.push(['Optional','opt']);
+  if (st.b === 'must')  c.push(['Must book','book']);
+  if (st.b === 'ok')    c.push(['Booked','booked']);
+  if (st.b === 'sold')  c.push(['Sold out online','sold']);
+  if (st.w)             c.push(['Weather dependent','weather']);
+  return c;
+}
+
 const FILTERS = [
   { id:'all',  label:'All',    icon:'i-list'  },
   { id:'must', label:'Must',   icon:'i-pin'   },
@@ -193,12 +206,16 @@ function dayBlocks(d){
   if (d.alert) rows.push(`<p class="dbl warn">${icon('i-alert')}<span>${esc(d.alert)}</span></p>`);
   const line = (k, cls, v) => rows.push(
     `<p class="dbl"><b class="${cls}">${k}</b><span>${esc(v)}</span></p>`);
+  if (d.must)                  line('Must do',   'k-must', d.must);
   if (d.book && d.book.length) line('Must book', 'k-book', d.book.join(' · '));
   if (d.drop && d.drop.length) line('Drop first', 'k-drop', d.drop.join(' · '));
   if (d.tip)                   line('Transport', 'k-tip',  d.tip);
+  if (d.checks && d.checks.length) rows.push(
+    `<div class="dbl checks"><b class="k-chk">Before</b><span class="chkrow">${
+      d.checks.map(c => `<button class="chk-chip ${store.is('chk', c.id) ? 'on' : ''}" data-chk="${c.id}">
+        ${icon('i-check')}${esc(c.t)}</button>`).join('')}</span></div>`);
   if (!rows.length) return '';
-  return `<div class="dblocks" id="dblocks" role="button" tabindex="0"
-            aria-label="Notes du jour, toucher pour développer">${rows.join('')}</div>`;
+  return `<div class="dblocks" id="dblocks">${rows.join('')}</div>`;
 }
 
 function paintHead(){
@@ -227,11 +244,14 @@ function paintHead(){
   const fx = document.getElementById('dhFocus');
   fx && fx.addEventListener('click', () => fx.classList.toggle('more'));
   const db = document.getElementById('dblocks');
-  if (db){
-    const t = () => db.classList.toggle('open');
-    db.addEventListener('click', t);
-    db.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); t(); } });
-  }
+  if (db) db.addEventListener('click', e => {
+    const chip = e.target.closest('[data-chk]');
+    if (chip){
+      chip.classList.toggle('on', store.toggle('chk', chip.dataset.chk));
+      buzz(8); e.stopPropagation(); return;
+    }
+    db.classList.toggle('open');
+  });
 
   els.bbTitle.textContent = d.label;
   els.bbSub.textContent = `${d.city} · ${p.n}/${p.t}`;
@@ -250,8 +270,9 @@ function paintHead(){
 }
 
 /* ── timeline ────────────────────────────────────────────────────────── */
-function stopHTML(st){
+function stopHTML(st, lead){
   const [klabel, kicon] = KIND[st.k] || KIND.sight;
+  const area = lead && st.a ? AREAS[st.a] : null;
   const done = store.is('done', st.id), fav = store.is('fav', st.id);
   const cls = ['stop', st.o ? 'opt':'', done ? 'done':'', fav ? 'fav':'', S.sel === st.id ? 'sel open':''].join(' ');
   return `<li class="${cls}" data-id="${st.id}" id="stop-${st.id.replace('.','-')}">
@@ -263,12 +284,11 @@ function stopHTML(st){
         <span class="l1">
           ${st.t ? `<span class="time">${esc(st.t)}</span>` : ''}
           <span class="nm">${esc(st.name)}</span>
-          ${st.m ? '<span class="tag must">Must</span>' : ''}
-          ${st.o ? '<span class="tag opt">Option</span>' : ''}
-          ${st.b === 'must' ? '<span class="tag book">Must book</span>' : ''}
-          ${st.b === 'ok'   ? '<span class="tag booked">Booked</span>'  : ''}
+          ${chipsFor(st).map(([l,k]) => `<span class="tag ${k}">${l}</span>`).join('')}
         </span>
-        <span class="l2">${icon(kicon)}<span class="txt">${esc(klabel)}${st.note ? `<span class="nt"> · ${esc(st.note)}</span>` : ''}</span></span>
+        <span class="l2">${icon(kicon)}<span class="txt">${esc(klabel)}${
+          area ? `<span class="nt ctx"> · ${esc(area.one)}</span>`
+               : st.note ? `<span class="nt"> · ${esc(st.note)}</span>` : ''}</span></span>
       </button>
       <button class="stop-fav" data-act="fav" aria-label="Ajouter ${esc(st.name)} aux favoris" aria-pressed="${fav}">
         ${icon('i-star')}
@@ -276,6 +296,9 @@ function stopHTML(st){
     </div>
     <div class="stop-x">
       ${st.note ? `<p>${esc(st.note)}</p>` : ''}
+      ${st.plans ? `<div class="plans">${st.plans.map(pl =>
+          `<div class="plan"><b>${esc(pl.k)}</b><span>${esc(pl.d)}</span></div>`).join('')}</div>` : ''}
+      ${area ? `<button class="areabtn" data-area="${st.a}">${icon('i-book')}Understand this area<i>→</i></button>` : ''}
       ${st.region === 'CN' ? `<p class="hint">Les boutons DiDi et Alipay copient le nom chinois : collez-le comme destination dans l’app DiDi, ou dans le mini-programme DiDi d’Alipay ou WeChat.</p>` : ''}
       <div class="acts">
         ${actionsFor(st).map(a => a.copy
@@ -295,12 +318,19 @@ function paintTimeline(){
     els.timeline.innerHTML = `<p class="empty">Aucune étape pour ce filtre.</p>`;
     return;
   }
+  /* Show the neighbourhood context on the first visible stop of each area only,
+     so three stops in Sham Shui Po don't repeat the same sentence three times. */
+  const seen = new Set();
+  const leads = new Map();
+  list.forEach(st => {
+    if (st.a && AREAS[st.a] && !seen.has(st.a)){ seen.add(st.a); leads.set(st.id, true); }
+  });
   els.timeline.innerHTML = SLOTS.map(([slot, label]) => {
     const group = list.filter(s => s.s === slot);
     if (!group.length) return '';
     return `<section class="slot">
       <div class="slot-h"><span class="lab">${label}</span><span class="rule"></span><span class="cnt">${group.length}</span></div>
-      <ol class="stops">${group.map(stopHTML).join('')}</ol>
+      <ol class="stops">${group.map(st => stopHTML(st, leads.has(st.id))).join('')}</ol>
     </section>`;
   }).join('');
 }
@@ -539,6 +569,18 @@ function bindSheet(){
     closeSheet(); renderDay(); toast('Données effacées');
   });
 }
+function areaSheet(id){
+  const a = AREAS[id];
+  if (!a) return;
+  openSheet(a.name, `
+    <div class="sheet-s"><p class="lede">${esc(a.one)}</p></div>
+    <div class="sheet-s"><div class="card">
+      <div class="row"><span class="k">History</span><span class="v">${esc(a.h)}</span></div>
+      <div class="row"><span class="k">Today</span><span class="v">${esc(a.t)}</span></div>
+      <div class="row"><span class="k">Notice</span><span class="v">${esc(a.n)}</span></div>
+    </div></div>`);
+}
+
 function infoSheet(){
   const f = TRIP.flights.map(x => `
     <div class="row"><span class="k">${esc(x.code)}</span><span class="v">
@@ -592,6 +634,8 @@ els.timeline.addEventListener('click', async e => {
     toast(ok ? cp.dataset.toast : `Copie impossible · ${cp.dataset.copy}`);
     return;
   }
+  const ab = e.target.closest('[data-area]');
+  if (ab){ areaSheet(ab.dataset.area); return; }
   const btn = e.target.closest('[data-act]');
   if (!btn) return;
   const li = btn.closest('.stop'); if (!li) return;

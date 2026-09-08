@@ -8,6 +8,7 @@
   --line:#E6E3DE;      --line-2:#F0EDE8;
   --accent:#B4442C;    --accent-ink:#FFFFFF;  --accent-soft:#F6ECE8;
   --ok:#2C7A57;        --ok-soft:#EAF3EE;
+  --info:#2E5F8A;      --info-soft:#E9EFF5;
   --shadow:0 1px 2px rgba(20,18,16,.05), 0 8px 24px -12px rgba(20,18,16,.18);
   --r:12px; --r-s:8px; --r-l:16px;
   --tap:44px;
@@ -25,6 +26,7 @@
     --line:#25282E;    --line-2:#1E2126;
     --accent:#E06A4C;  --accent-ink:#15161A; --accent-soft:#2A1A15;
     --ok:#5FBF8F;      --ok-soft:#16241D;
+    --info:#78A8D6;    --info-soft:#141D27;
     --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
     color-scheme:dark;
   }
@@ -137,9 +139,20 @@ ol,ul{margin:0;padding:0;list-style:none}
   margin-top:10px;border:1px solid var(--line);border-radius:var(--r-s);
   background:var(--surface);overflow:hidden;cursor:pointer
 }
+.dbl.checks{align-items:center;padding:6px 10px}
+.chkrow{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;white-space:nowrap;padding:1px 0}
+.chkrow::-webkit-scrollbar{display:none}
+.chk-chip{
+  flex:none;display:inline-flex;align-items:center;gap:4px;height:23px;padding:0 8px;
+  border:1px solid var(--line);border-radius:99px;background:var(--surface-2);
+  font-size:11px;font-weight:540;color:var(--ink-2)
+}
+.chk-chip .ico{width:11px;height:11px;color:var(--line);stroke-width:2.6}
+.chk-chip.on{background:var(--ok-soft);border-color:color-mix(in srgb,var(--ok) 32%,transparent);color:var(--ok)}
+.chk-chip.on .ico{color:var(--ok)}
 .dbl{
-  display:flex;gap:8px;align-items:baseline;margin:0;padding:7px 10px;
-  border-top:1px solid var(--line-2);font-size:12.5px;line-height:1.45
+  display:flex;gap:8px;align-items:baseline;margin:0;padding:6px 10px;
+  border-top:1px solid var(--line-2);font-size:12.5px;line-height:1.4
 }
 .dbl:first-child{border-top:0}
 .dbl b{
@@ -151,7 +164,9 @@ ol,ul{margin:0;padding:0;list-style:none}
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap
 }
 .dblocks.open .dbl>span{white-space:normal}
+.dbl .k-must{color:var(--accent)}
 .dbl .k-book{color:var(--accent)}
+.dbl .k-chk{color:var(--ink-3)}
 .dbl .k-drop{color:var(--ink-3)}
 .dbl .k-tip{color:var(--ink-3)}
 .dbl.warn{
@@ -296,13 +311,38 @@ body.mapfull .mapdock::-webkit-scrollbar{display:none}
   padding:2px 5px;border-radius:4px;flex:none;line-height:1.25
 }
 .tag.must{color:var(--accent);background:var(--accent-soft)}
+.tag.hard{color:var(--accent-ink);background:var(--accent);letter-spacing:.1em}
 .tag.opt{color:var(--ink-3);border:1px solid var(--line)}
-.tag.book{color:#fff;background:var(--accent)}
+.tag.book{color:var(--accent);background:var(--accent-soft);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 38%,transparent)}
 .tag.booked{color:var(--ok);background:var(--ok-soft)}
+.tag.sold{color:var(--ink-2);background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--line);text-decoration:line-through;text-decoration-thickness:1px}
+.tag.weather{color:var(--info);background:var(--info-soft)}
 .l2{display:flex;align-items:center;gap:5px;margin-top:2px;color:var(--ink-3);font-size:12px;min-width:0}
 .l2 .ico{width:12.5px;height:12.5px;flex:none}
 .l2 .txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .stop.open .l2 .nt{display:none}
+.l2 .ctx{color:var(--ink-2)}
+.stop.open .l2 .ctx{display:inline}
+.stop.open .l2 .txt{white-space:normal}
+
+.areabtn{
+  display:inline-flex;align-items:center;gap:7px;margin:0 0 10px;padding:6px 10px 6px 8px;
+  border:1px solid var(--line);border-radius:8px;background:transparent;
+  font-size:12px;font-weight:540;color:var(--ink-2);letter-spacing:.005em
+}
+.areabtn .ico{width:13px;height:13px;color:var(--ink-3)}
+.areabtn i{font-style:normal;color:var(--ink-3);margin-left:1px}
+.areabtn:active{background:var(--surface-2)}
+
+/* Plan A / Plan B */
+.plans{border:1px solid var(--line);border-radius:var(--r-s);overflow:hidden;margin:0 0 10px}
+.plan{display:flex;gap:9px;padding:8px 10px;border-top:1px solid var(--line-2);align-items:baseline}
+.plan:first-child{border-top:0}
+.plan b{
+  flex:none;width:52px;font-size:9.5px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--accent);line-height:1.75
+}
+.plan span{flex:1;min-width:0;font-size:12.5px;line-height:1.5;color:var(--ink-2)}
 
 .stop-fav{flex:none;width:30px;height:30px;display:grid;place-items:center;border-radius:8px;color:var(--line);margin:-2px -2px 0 0}
 .stop-fav .ico{width:15px;height:15px}
@@ -397,6 +437,11 @@ body.mapfull .mapdock::-webkit-scrollbar{display:none}
 .chk .t{flex:1;font-size:13.5px;line-height:1.45}
 .chk.on .t{color:var(--ink-3);text-decoration:line-through;text-decoration-color:var(--line)}
 .chk .t small{display:block;font-size:11.5px;color:var(--ink-3);margin-top:2px;text-decoration:none;line-height:1.5}
+.lede{
+  margin:0;font-family:var(--serif);font-size:16px;line-height:1.45;
+  color:var(--ink);letter-spacing:-.005em
+}
+.sheet-s .row .k{width:58px}
 .tip{font-size:12px;color:var(--ink-3);line-height:1.6;padding:10px 4px 0}
 .tip kbd{font:inherit;font-size:11px;border:1px solid var(--line);border-radius:4px;padding:1px 4px;background:var(--surface)}
 .danger{color:var(--accent);font-weight:600}

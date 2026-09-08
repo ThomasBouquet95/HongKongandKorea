@@ -16,8 +16,10 @@ over HTTPS and install it to the home screen.
 | **Two-way focus** | Tap a stop → its pin highlights and the map flies to it. Tap a pin → the itinerary row scrolls into view, flashes, and expands. |
 | **Smart framing** | Airports and cross-country legs are grouped out of the default fit, so a 30 km outlier doesn't flatten the day. The crosshair button lights up when stops sit outside the view and toggles between the main area and all points. |
 | **Navigation, per country** | Hong Kong leads with **Google Maps**. Korea leads with **Naver Map**, Google Maps kept alongside it. Shenzhen has no usable Western map, so the primary actions are **DiDi** and **Alipay**: they copy the stop's Chinese name to the clipboard to paste as the destination, with **Baidu** to look the place up. |
-| **Day briefing** | Every day carries three compact rows above the map — **Must book**, **Drop first if late** and **Transport tip** — plus an accent banner on the days that need one (Fire Dragon timing, the 30 Sep clock, Gyeongbokgung, the 3 Oct public holiday, the 15:30 airport departure). Tap the card to expand. |
-| **Booking state** | Stops show a **Must book** or **Booked** badge, so the reservations you still owe are visible in the timeline, not only in the practical sheet. |
+| **Day briefing** | Every day carries compact one-line rows above the map — **Must do**, **Must book**, **Drop first if late**, **Transport tip** — plus an accent banner on the days that need one (the Fire Dragon window, the 30 Sep clock, the Gyeongbokgung ticket situation, the 3 Oct public holiday, the fixed 15:30 airport departure). Tap the card to expand. Shenzhen adds a **Before** row of tappable checks: passport, visa, Alipay, WeChat Pay, card, eSIM, VPN, cash. |
+| **Neighbourhood context** | 42 neighbourhoods carry pre-written context, so it works offline. The first stop in each area shows a one-sentence explanation under its name; opening the stop reveals **Understand this area →**, a sheet with History, Today and what to Notice while walking, 80–120 words. Repeats are suppressed — three stops in Sham Shui Po show the sentence once. |
+| **Status chips** | **Hard must** · **Must** · **Optional** · **Must book** · **Booked** · **Sold out online** · **Weather dependent**, so the ones you cannot move look different from the ones you can. |
+| **Fallback plans** | A stop can carry Plan A / Plan B. Gyeongbokgung's night viewing is sold out online, so it shows the 300 same-day foreigner tickets at Gwanghwamun and the hanbok route. |
 | **Fullscreen map** | Expand button or `F`. Day nav stays available and a swipeable card rail along the bottom walks the stops. |
 | **Filters** | All · Must · Eat & drink · Saved · To do — applied to the list and the map together. |
 | **Progress** | Tap a stop's number to mark it done. Progress shows per day in the day strip, the header and the bottom bar. |
@@ -47,24 +49,44 @@ Editing the trip means editing `assets/js/data.js` only — everything else is d
 from it. A stop is:
 
 ```js
-{ s:'afternoon', k:'museum', m:1, b:'must', t:'19:00', name:'…', note:'…',
+{ s:'afternoon', k:'museum', m:1, hard:1, b:'must', w:1, a:'bukchon',
+  t:'19:00', name:'…', note:'…', plans:[{k:'Plan A', d:'…'}],
   lat:…, lng:…, q:'search text', zh:'中文名' }
-//  slot  kind  must  booking  time                    Maps query   DiDi/Alipay destination
 ```
 
-Kinds: `sight food cafe bar shop museum nature market view walk hotel transit plane`.
-Add `o:1` for an optional/alternative stop (dashed pin, "Option" tag).
-`b:'must'` / `b:'ok'` drive the booking badge. `zh` is the Chinese destination the
-Shenzhen DiDi and Alipay buttons copy — Shenzhen stops without one fall back to the name.
+| field | meaning |
+|---|---|
+| `s` | slot: `morning` `lunch` `afternoon` `evening` `transit` |
+| `k` | kind: `sight food cafe bar shop museum nature market view walk hotel transit plane` |
+| `m` / `hard` | Must / Hard must — `hard` also counts as must for the filter |
+| `o` | optional or alternative: dashed map pin, Optional chip |
+| `b` | `must` → Must book, `ok` → Booked, `sold` → Sold out online |
+| `w` | weather dependent |
+| `a` | neighbourhood id into `AREAS` — drives the context line and the sheet |
+| `t` | time chip |
+| `plans` | `[{k, d}]` fallback plans shown in the expanded stop |
+| `zh` | Chinese destination the Shenzhen DiDi and Alipay buttons copy |
 
 A day also carries the briefing fields, all optional:
 
 ```js
-alert: 'accent banner across the top of the day',
-book:  ['what still needs reserving'],
-drop:  ['what to cut first if you fall behind'],
-tip:   'how to actually move between these stops'
+alert:  'accent banner across the top of the day',
+must:   'the one line that matters if you read nothing else',
+book:   ['what still needs reserving'],
+drop:   ['what to cut first if you fall behind'],
+tip:    'how to actually move between these stops',
+checks: [{ id:'sz1', t:'Passeport' }]   // tappable, saved locally
 ```
+
+Neighbourhood entries live in the `AREAS` map at the top of the same file:
+
+```js
+poho: { name:'PoHo',
+  one:'the sentence shown under the stop name',
+  h:'History', t:'Why it feels this way today', n:'What to notice' }
+```
+
+Keep `h + t + n` between 80 and 120 words — the sheet is designed around that length.
 
 ## Map data
 
