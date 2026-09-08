@@ -17,10 +17,10 @@ over HTTPS and install it to the home screen.
 | **Smart framing** | Airports and cross-country legs are grouped out of the default fit, so a 30 km outlier doesn't flatten the day. The crosshair button lights up when stops sit outside the view and toggles between the main area and all points. |
 | **Navigation, per country** | Hong Kong leads with **Google Maps**. Korea leads with **Naver Map**, Google Maps kept alongside it. Shenzhen has no usable Western map, so the primary actions are **DiDi** and **Alipay**: they copy the stop's Chinese name to the clipboard to paste as the destination, with **Baidu** to look the place up. |
 | **Day briefing** | Every day carries compact one-line rows above the map — **Must do**, **Must book**, **Drop first if late**, **Transport tip** — plus an accent banner on the days that need one (the Fire Dragon window, the 30 Sep clock, the Gyeongbokgung ticket situation, the 3 Oct public holiday, the fixed 15:30 airport departure). Tap the card to expand. Shenzhen adds a **Before** row of tappable checks: passport, visa, Alipay, WeChat Pay, card, eSIM, VPN, cash. |
-| **Neighbourhood context** | 42 neighbourhoods carry pre-written context, so it works offline. The first stop in each area shows a one-sentence explanation under its name; opening the stop reveals **Understand this area →**, a sheet with History, Today and what to Notice while walking, 80–120 words. Repeats are suppressed — three stops in Sham Shui Po show the sentence once. |
+| **Neighbourhood context** | 43 neighbourhoods carry pre-written context **in French**, so it works offline. The first stop in each area shows a one-sentence explanation under its name; opening the stop reveals **Understand this area →**, a sheet with Histoire, Aujourd’hui and À remarquer — 80–120 words each, checked programmatically. Repeats are suppressed — three stops in Sham Shui Po show the sentence once. |
 | **Places vs services** | Stops you go to *see* — neighbourhoods, sights, viewpoints, museums, nature, markets — get a light indigo wash across the whole row, a filled indigo number and a filled indigo map pin. Restaurants, cafés, bars, shops, hotels and transit stay neutral, so a temple never looks like a cocktail bar and you can find the day's activities without reading. 65 of 169 stops are places. |
-| **Status chips** | **Hard must** · **Must** · **Optional** · **Must book** · **Booked** · **Sold out online** · **Weather dependent**, so the ones you cannot move look different from the ones you can. |
-| **Fallback plans** | A stop can carry Plan A / Plan B. Gyeongbokgung's night viewing is sold out online, so it shows the 300 same-day foreigner tickets at Gwanghwamun and the hanbok route. |
+| **Status chips** | **Hard must** · **Must** · **Optional** · **To book** · **Booked** · **Weather dependent** · **Hard deadline**, so the ones you cannot move look different from the ones you can. |
+| **Real POIs only** | Stops that are genuine addresses get a pin and turn-by-turn navigation. Generic ones — “Dîner à Euljiro”, “Cheongsapo seafood” — are flagged `gen`: dotted pin, an explicit *recommandation de zone* note, and an area search instead of navigation to an invented point. |
 | **Fullscreen map** | Expand button or `F`. Day nav stays available and a swipeable card rail along the bottom walks the stops. |
 | **Filters** | All · Must · Eat & drink · Saved · To do — applied to the list and the map together. |
 | **Progress** | Tap a stop's number to mark it done. Progress shows per day in the day strip, the header and the bottom bar. |
@@ -63,7 +63,9 @@ from it. A stop is:
 | `m` / `hard` | Must / Hard must — `hard` also counts as must for the filter |
 | `k` (again) | also decides the colour: `sight view museum nature walk market` render as places, everything else neutral |
 | `o` | optional or alternative: dashed map pin, Optional chip |
-| `b` | `must` → Must book, `ok` → Booked, `sold` → Sold out online |
+| `b` | `todo` → To book, `ok` → Booked |
+| `dl` | hard deadline |
+| `gen` | area recommendation, not a real POI |
 | `w` | weather dependent |
 | `a` | neighbourhood id into `AREAS` — drives the context line and the sheet |
 | `t` | time chip |
