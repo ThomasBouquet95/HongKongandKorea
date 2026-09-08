@@ -8,7 +8,8 @@
   --line:#E6E3DE;      --line-2:#F0EDE8;
   --accent:#B4442C;    --accent-ink:#FFFFFF;  --accent-soft:#F6ECE8;
   --ok:#2C7A57;        --ok-soft:#EAF3EE;
-  --info:#2E5F8A;      --info-soft:#E9EFF5;
+  --place:#33518C;     --place-soft:#ECEFF7;
+  --info:#8A6212;      --info-soft:#F6EFE0;
   --shadow:0 1px 2px rgba(20,18,16,.05), 0 8px 24px -12px rgba(20,18,16,.18);
   --r:12px; --r-s:8px; --r-l:16px;
   --tap:44px;
@@ -26,7 +27,8 @@
     --line:#25282E;    --line-2:#1E2126;
     --accent:#E06A4C;  --accent-ink:#15161A; --accent-soft:#2A1A15;
     --ok:#5FBF8F;      --ok-soft:#16241D;
-    --info:#78A8D6;    --info-soft:#141D27;
+    --place:#8FA8E0;   --place-soft:#181D2B;
+    --info:#D6A94E;    --info-soft:#241D10;
     --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
     color-scheme:dark;
   }
@@ -247,6 +249,7 @@ body.mapfull .mapdock::-webkit-scrollbar{display:none}
   transition:transform .18s var(--ease),background .18s var(--ease),color .18s var(--ease)
 }
 .pin.opt i{border-style:dashed;color:var(--ink-2);background:var(--surface)}
+.pin.place i{border-color:var(--place);color:var(--place)}
 .pin.done i{background:var(--ok);border-color:var(--ok);color:#fff}
 .pin.act i{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);transform:scale(1.28);box-shadow:0 2px 10px rgba(0,0,0,.3)}
 .pin.act::after{
@@ -293,6 +296,12 @@ body.mapfull .mapdock::-webkit-scrollbar{display:none}
 }
 .num .ico{width:12px;height:12px;display:none}
 .stop.opt .num{border-style:dashed;background:transparent}
+/* Places you go to see read in indigo; food, drink and shops stay neutral. */
+.stop.place .num{
+  border-color:color-mix(in srgb,var(--place) 42%,transparent);
+  color:var(--place);background:var(--place-soft)
+}
+.stop.place.opt .num{background:transparent}
 .stop.sel .num{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
 .stop.done .num{background:var(--ok);border-color:var(--ok);color:#fff}
 .stop.done .num em{display:none}
@@ -319,6 +328,10 @@ body.mapfull .mapdock::-webkit-scrollbar{display:none}
 .tag.weather{color:var(--info);background:var(--info-soft)}
 .l2{display:flex;align-items:center;gap:5px;margin-top:2px;color:var(--ink-3);font-size:12px;min-width:0}
 .l2 .ico{width:12.5px;height:12.5px;flex:none}
+.l2 .kl{font-weight:520;color:inherit}
+.stop.place .l2 .ico{color:var(--place)}
+.stop.place .l2 .kl{color:var(--place)}
+.stop.done .l2 .ico,.stop.done .l2 .kl{color:var(--ink-3)}
 .l2 .txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .stop.open .l2 .nt{display:none}
 .l2 .ctx{color:var(--ink-2)}
@@ -327,12 +340,12 @@ body.mapfull .mapdock::-webkit-scrollbar{display:none}
 
 .areabtn{
   display:inline-flex;align-items:center;gap:7px;margin:0 0 10px;padding:6px 10px 6px 8px;
-  border:1px solid var(--line);border-radius:8px;background:transparent;
-  font-size:12px;font-weight:540;color:var(--ink-2);letter-spacing:.005em
+  border:1px solid color-mix(in srgb,var(--place) 30%,transparent);border-radius:8px;
+  background:var(--place-soft);font-size:12px;font-weight:540;color:var(--place);letter-spacing:.005em
 }
-.areabtn .ico{width:13px;height:13px;color:var(--ink-3)}
-.areabtn i{font-style:normal;color:var(--ink-3);margin-left:1px}
-.areabtn:active{background:var(--surface-2)}
+.areabtn .ico{width:13px;height:13px;color:var(--place)}
+.areabtn i{font-style:normal;color:var(--place);margin-left:1px;opacity:.7}
+.areabtn:active{filter:brightness(.97)}
 
 /* Plan A / Plan B */
 .plans{border:1px solid var(--line);border-radius:var(--r-s);overflow:hidden;margin:0 0 10px}

@@ -430,10 +430,10 @@ const TRIP = {
     { s:'lunch', k:'food', o:1, name:'Chao Shan Da Mu Beef Hotpot City', note:'Alternative.', lat:22.5310, lng:113.9300, q:'Chao Shan Da Mu Beef Hotpot Shenzhen' },
 
     { s:'afternoon', k:'transit', o:1, zh:'前海', name:'Bonus · robotaxi Pony.ai', note:'Bonus, pas un objectif. Nanshan et Qianhai sont dans la zone d’opération : à faire seulement si un véhicule est disponible sans attendre.', lat:22.5300, lng:113.8900, q:'Qianhai Shenzhen' },
-    { s:'afternoon', k:'shop', m:1, zh:'华侨城创意文化园 OCT-LOFT', a:'octloft', name:'OCT-LOFT', note:'Ancienne zone industrielle devenue quartier créatif.', lat:22.5450, lng:113.9860, q:'OCT-LOFT Shenzhen' },
+    { s:'afternoon', k:'sight', m:1, zh:'华侨城创意文化园 OCT-LOFT', a:'octloft', name:'OCT-LOFT', note:'Ancienne zone industrielle devenue quartier créatif.', lat:22.5450, lng:113.9860, q:'OCT-LOFT Shenzhen' },
     { s:'afternoon', k:'shop', zh:'旧天堂书店 华侨城创意文化园', a:'octloft', name:'Old Heaven', note:'Librairie, musique, vinyles et art.', lat:22.5452, lng:113.9866, q:'Old Heaven Books OCT-LOFT Shenzhen' },
     { s:'afternoon', k:'shop', o:1, zh:'大疆旗舰店 欢乐海岸', name:'Bonus · DJI Flagship Store', note:'Bonus, pas un objectif. OCT Harbour, en milieu d’après-midi, seulement si vous êtes en avance sur Huaqiangbei.', lat:22.5210, lng:113.9880, q:'DJI Flagship Store OCT Harbour Shenzhen' },
-    { s:'afternoon', k:'shop', zh:'华强北 赛格广场', a:'huaqiangbei', name:'Huaqiangbei · SEG Plaza', note:'Le plus grand marché électronique du monde. Fin d’après-midi.', lat:22.5473, lng:114.0862, q:'SEG Plaza Huaqiangbei Shenzhen' },
+    { s:'afternoon', k:'market', zh:'华强北 赛格广场', a:'huaqiangbei', name:'Huaqiangbei · SEG Plaza', note:'Le plus grand marché électronique du monde. Fin d’après-midi.', lat:22.5473, lng:114.0862, q:'SEG Plaza Huaqiangbei Shenzhen' },
 
     { s:'evening', k:'view', m:1, t:'17:00', zh:'深圳瑞吉酒店 京基100', name:'Drawing Room · St. Regis, 96e étage', note:'DiDi vers The St. Regis Shenzhen dans KK100 vers 17h–17h30, puis Drawing Room pour voir la ville s’illuminer.', lat:22.5450, lng:114.1080, q:'The St. Regis Shenzhen KK100' },
     { s:'evening', k:'bar', o:1, zh:'深圳瑞吉酒店 京基100', name:'St. Regis Bar', note:'Éventuellement un cocktail avant de redescendre.', lat:22.5450, lng:114.1080, q:'St. Regis Bar Shenzhen' },
@@ -574,9 +574,9 @@ const TRIP = {
   tip: 'Colonne vertébrale intouchable : Forena → Yeonnam → Seochon → Bukchon / Samcheong → Gyeongbokgung. Taxi Yeonnam → Seochon, environ 20 min. Tout le reste vient après le palais, pas avant.',
   stops: [
     { s:'morning', k:'sight', m:1, t:'10:00', name:'Forena Clinic Hongdae', note:'7th Floor, H-CUBE, 140 Yanghwa-ro. Horaire compatible avec les heures d’ouverture du jeudi. Le point de départ fixe de la journée.', lat:37.5555, lng:126.9236, q:'Forena Clinic Hongdae 140 Yanghwa-ro' },
-    { s:'morning', k:'cafe', a:'yeonnam', name:'Centralsite Coffee Roasters Yeonnam', note:'Fin de matinée à Yeonnam-dong, à dix minutes à pied de la clinique.', lat:37.5630, lng:126.9245, q:'Centralsite Coffee Roasters Yeonnam' },
+    { s:'morning', k:'cafe', name:'Centralsite Coffee Roasters Yeonnam', note:'Fin de matinée à Yeonnam-dong, à dix minutes à pied de la clinique.', lat:37.5630, lng:126.9245, q:'Centralsite Coffee Roasters Yeonnam' },
     { s:'morning', k:'shop', name:'Object', note:'Papeterie, illustration et objets de designers coréens.', lat:37.5545, lng:126.9245, q:'Object Sangsang Hongdae Seoul' },
-    { s:'morning', k:'nature', name:'Gyeongui Line Forest Park', note:'La coulée verte de Yeonnam, sur l’ancienne voie ferrée.', lat:37.5610, lng:126.9255, q:'Gyeongui Line Forest Park Yeonnam' },
+    { s:'morning', k:'nature', a:'yeonnam', name:'Gyeongui Line Forest Park', note:'La coulée verte de Yeonnam, sur l’ancienne voie ferrée.', lat:37.5610, lng:126.9255, q:'Gyeongui Line Forest Park Yeonnam' },
 
     { s:'lunch', k:'food', name:'Déjeuner léger · Yeonnam / Hongdae', note:'Léger : la journée est longue et se termine tard. Puis taxi vers Seochon, environ 20 min.', lat:37.5615, lng:126.9250, q:'Yeonnam-dong restaurants Seoul' },
 
@@ -610,7 +610,8 @@ const TRIP = {
   tip: 'Seoul Forest et le café d’abord : MUSINSA EMPTY n’ouvre qu’à 11h. Taxi Seongsu → Dosan (~25 min).',
   stops: [
     { s:'morning', k:'nature', name:'Seoul Forest', note:'Faire le parc et le café en premier : MUSINSA EMPTY n’ouvre qu’à 11h.', lat:37.5444, lng:127.0374, q:'Seoul Forest Park' },
-    { s:'morning', k:'cafe', a:'seongsu', name:'LowKey Seongsu', note:'Specialty coffee.', lat:37.5430, lng:127.0560, q:'LowKey Coffee Seongsu' },
+    { s:'morning', k:'walk', m:1, a:'seongsu', name:'Seongsu-dong', note:'Anciens ateliers de chaussures en brique rouge, convertis bâtiment par bâtiment. À parcourir à pied avant que le retail n’ouvre.', lat:37.5445, lng:127.0557, q:'Seongsu-dong Seoul' },
+    { s:'morning', k:'cafe', name:'LowKey Seongsu', note:'Specialty coffee.', lat:37.5430, lng:127.0560, q:'LowKey Coffee Seongsu' },
     { s:'morning', k:'shop', m:1, name:'LCDC Seoul', note:'Complexe retail et design.', lat:37.5410, lng:127.0570, q:'LCDC Seoul Seongsu' },
     { s:'morning', k:'shop', name:'MUSINSA EMPTY SEONGSU', note:'Ouvre à 11h.', lat:37.5448, lng:127.0553, q:'MUSINSA EMPTY Seongsu' },
     { s:'morning', k:'shop', name:'Point of View', note:'Papeterie et objets d’écriture.', lat:37.5433, lng:127.0568, q:'Point of View Seongsu' },

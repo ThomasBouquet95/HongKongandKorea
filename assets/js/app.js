@@ -27,6 +27,9 @@ const MON = ['jan','fév','mar','avr','mai','juin','juil','août','sep','oct','n
 const DOW = ['dim','lun','mar','mer','jeu','ven','sam'];
 const DOW_L = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
 const FOODY = new Set(['food','cafe','bar','market']);
+/* Places you go to see, as opposed to restaurants, cafés, bars and shops. */
+const PLACE = new Set(['sight','view','museum','nature','walk','market']);
+const isPlace = st => PLACE.has(st.k);
 
 /* Status chips, in the order they read best on one line. */
 function chipsFor(st){
@@ -274,7 +277,8 @@ function stopHTML(st, lead){
   const [klabel, kicon] = KIND[st.k] || KIND.sight;
   const area = lead && st.a ? AREAS[st.a] : null;
   const done = store.is('done', st.id), fav = store.is('fav', st.id);
-  const cls = ['stop', st.o ? 'opt':'', done ? 'done':'', fav ? 'fav':'', S.sel === st.id ? 'sel open':''].join(' ');
+  const cls = ['stop', isPlace(st) ? 'place':'', st.o ? 'opt':'', done ? 'done':'',
+               fav ? 'fav':'', S.sel === st.id ? 'sel open':''].join(' ');
   return `<li class="${cls}" data-id="${st.id}" id="stop-${st.id.replace('.','-')}">
     <div class="stop-row">
       <button class="numwrap" data-act="done" aria-label="Marquer ${esc(st.name)} comme fait" aria-pressed="${done}">
@@ -286,7 +290,7 @@ function stopHTML(st, lead){
           <span class="nm">${esc(st.name)}</span>
           ${chipsFor(st).map(([l,k]) => `<span class="tag ${k}">${l}</span>`).join('')}
         </span>
-        <span class="l2">${icon(kicon)}<span class="txt">${esc(klabel)}${
+        <span class="l2">${icon(kicon)}<span class="txt"><b class="kl">${esc(klabel)}</b>${
           area ? `<span class="nt ctx"> · ${esc(area.one)}</span>`
                : st.note ? `<span class="nt"> · ${esc(st.note)}</span>` : ''}</span></span>
       </button>
@@ -320,11 +324,14 @@ function paintTimeline(){
   }
   /* Show the neighbourhood context on the first visible stop of each area only,
      so three stops in Sham Shui Po don't repeat the same sentence three times. */
-  const seen = new Set();
   const leads = new Map();
+  const byArea = new Map();
   list.forEach(st => {
-    if (st.a && AREAS[st.a] && !seen.has(st.a)){ seen.add(st.a); leads.set(st.id, true); }
+    if (!st.a || !AREAS[st.a]) return;
+    if (!byArea.has(st.a)) byArea.set(st.a, []);
+    byArea.get(st.a).push(st);
   });
+  byArea.forEach(group => leads.set((group.find(isPlace) || group[0]).id, true));
   els.timeline.innerHTML = SLOTS.map(([slot, label]) => {
     const group = list.filter(s => s.s === slot);
     if (!group.length) return '';
@@ -370,7 +377,7 @@ function paintMap(fit = true){
     const m = L.marker([st.lat, st.lng], {
       icon: L.divIcon({
         className:'', iconSize:[23,23], iconAnchor:[11.5,11.5],
-        html:`<div class="pin ${st.o?'opt':''} ${done?'done':''}" data-id="${st.id}"><i>${st.n}</i></div>`
+        html:`<div class="pin ${isPlace(st)?'place':''} ${st.o?'opt':''} ${done?'done':''}" data-id="${st.id}"><i>${st.n}</i></div>`
       }),
       keyboard:false, riseOnHover:true, title: st.name
     }).addTo(S.map);

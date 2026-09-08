@@ -18,6 +18,7 @@ over HTTPS and install it to the home screen.
 | **Navigation, per country** | Hong Kong leads with **Google Maps**. Korea leads with **Naver Map**, Google Maps kept alongside it. Shenzhen has no usable Western map, so the primary actions are **DiDi** and **Alipay**: they copy the stop's Chinese name to the clipboard to paste as the destination, with **Baidu** to look the place up. |
 | **Day briefing** | Every day carries compact one-line rows above the map — **Must do**, **Must book**, **Drop first if late**, **Transport tip** — plus an accent banner on the days that need one (the Fire Dragon window, the 30 Sep clock, the Gyeongbokgung ticket situation, the 3 Oct public holiday, the fixed 15:30 airport departure). Tap the card to expand. Shenzhen adds a **Before** row of tappable checks: passport, visa, Alipay, WeChat Pay, card, eSIM, VPN, cash. |
 | **Neighbourhood context** | 42 neighbourhoods carry pre-written context, so it works offline. The first stop in each area shows a one-sentence explanation under its name; opening the stop reveals **Understand this area →**, a sheet with History, Today and what to Notice while walking, 80–120 words. Repeats are suppressed — three stops in Sham Shui Po show the sentence once. |
+| **Places vs services** | Stops you go to *see* — neighbourhoods, sights, viewpoints, museums, nature, markets — carry an indigo number, icon and map pin. Restaurants, cafés, bars, shops, hotels and transit stay neutral, so a temple never looks like a cocktail bar. 65 of 169 stops are places. |
 | **Status chips** | **Hard must** · **Must** · **Optional** · **Must book** · **Booked** · **Sold out online** · **Weather dependent**, so the ones you cannot move look different from the ones you can. |
 | **Fallback plans** | A stop can carry Plan A / Plan B. Gyeongbokgung's night viewing is sold out online, so it shows the 300 same-day foreigner tickets at Gwanghwamun and the hanbok route. |
 | **Fullscreen map** | Expand button or `F`. Day nav stays available and a swipeable card rail along the bottom walks the stops. |
@@ -59,6 +60,7 @@ from it. A stop is:
 | `s` | slot: `morning` `lunch` `afternoon` `evening` `transit` |
 | `k` | kind: `sight food cafe bar shop museum nature market view walk hotel transit plane` |
 | `m` / `hard` | Must / Hard must — `hard` also counts as must for the filter |
+| `k` (again) | also decides the colour: `sight view museum nature walk market` render as places, everything else neutral |
 | `o` | optional or alternative: dashed map pin, Optional chip |
 | `b` | `must` → Must book, `ok` → Booked, `sold` → Sold out online |
 | `w` | weather dependent |
@@ -87,6 +89,17 @@ poho: { name:'PoHo',
 ```
 
 Keep `h + t + n` between 80 and 120 words — the sheet is designed around that length.
+
+## Colour
+
+Four meanings, and nothing else is coloured:
+
+| | |
+|---|---|
+| vermilion | priority — Must, Hard must, times, the selected stop |
+| indigo | a place you go to see, as opposed to eat, drink or shop in |
+| green | done, and Booked |
+| amber | conditional — Weather dependent |
 
 ## Map data
 
