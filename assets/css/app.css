@@ -9,6 +9,7 @@
   --accent:#B4442C;    --accent-ink:#FFFFFF;  --accent-soft:#F6ECE8;
   --ok:#2C7A57;        --ok-soft:#EAF3EE;
   --place:#33518C;     --place-soft:#ECEFF7;
+  --place-row:#F4F7FC;  --place-fill:#DCE3F3;
   --info:#8A6212;      --info-soft:#F6EFE0;
   --shadow:0 1px 2px rgba(20,18,16,.05), 0 8px 24px -12px rgba(20,18,16,.18);
   --r:12px; --r-s:8px; --r-l:16px;
@@ -28,6 +29,7 @@
     --accent:#E06A4C;  --accent-ink:#15161A; --accent-soft:#2A1A15;
     --ok:#5FBF8F;      --ok-soft:#16241D;
     --place:#8FA8E0;   --place-soft:#181D2B;
+    --place-row:#141824; --place-fill:#242C40;
     --info:#D6A94E;    --info-soft:#241D10;
     --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
     color-scheme:dark;
@@ -249,7 +251,7 @@ body.mapfull .mapdock::-webkit-scrollbar{display:none}
   transition:transform .18s var(--ease),background .18s var(--ease),color .18s var(--ease)
 }
 .pin.opt i{border-style:dashed;color:var(--ink-2);background:var(--surface)}
-.pin.place i{border-color:var(--place);color:var(--place)}
+.pin.place i{border-color:var(--place);color:var(--place);background:var(--place-fill)}
 .pin.done i{background:var(--ok);border-color:var(--ok);color:#fff}
 .pin.act i{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);transform:scale(1.28);box-shadow:0 2px 10px rgba(0,0,0,.3)}
 .pin.act::after{
@@ -296,10 +298,14 @@ body.mapfull .mapdock::-webkit-scrollbar{display:none}
 }
 .num .ico{width:12px;height:12px;display:none}
 .stop.opt .num{border-style:dashed;background:transparent}
-/* Places you go to see read in indigo; food, drink and shops stay neutral. */
+/* Places you go to see read in indigo — a wash across the whole row and a
+   filled badge — so the things to do separate from the eating and shopping
+   at a glance. Food, drink, shops, hotels and transit stay neutral. */
+.stop.place{background:var(--place-row)}
+.stop.place .stop-row:active{background:color-mix(in srgb,var(--place) 11%,var(--surface))}
 .stop.place .num{
-  border-color:color-mix(in srgb,var(--place) 42%,transparent);
-  color:var(--place);background:var(--place-soft)
+  border-color:color-mix(in srgb,var(--place) 48%,transparent);
+  color:var(--place);background:var(--place-fill);font-weight:700
 }
 .stop.place.opt .num{background:transparent}
 .stop.sel .num{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
