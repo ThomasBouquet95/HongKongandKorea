@@ -34,13 +34,13 @@ const isPlace = st => PLACE.has(st.k);
 /* Status chips, in the order they read best on one line. */
 function chipsFor(st){
   const c = [];
-  if (st.hard)          c.push(['Hard must','hard']);
-  else if (st.m)        c.push(['Must','must']);
-  if (st.o)             c.push(['Optional','opt']);
-  if (st.b === 'must')  c.push(['Must book','book']);
-  if (st.b === 'ok')    c.push(['Booked','booked']);
-  if (st.b === 'sold')  c.push(['Sold out online','sold']);
-  if (st.w)             c.push(['Weather dependent','weather']);
+  if (st.hard)        c.push(['Hard must','hard']);
+  else if (st.m)      c.push(['Must','must']);
+  if (st.o)           c.push(['Optional','opt']);
+  if (st.dl)          c.push(['Hard deadline','dl']);
+  if (st.b === 'todo')c.push(['To book','book']);
+  if (st.b === 'ok')  c.push(['Booked','booked']);
+  if (st.w)           c.push(['Weather dependent','weather']);
   return c;
 }
 
@@ -113,7 +113,7 @@ function actionsFor(st){
   const gnav = { label:'Navigate',    url: mapsNav(st),    icon:'i-nav', primary:true };
 
   if (st.region === 'KR') return [
-    { label:'Naver Map', url:`https://map.naver.com/p/search/${enc(st.q)}`, icon:'i-nav', primary:true },
+    { label:'Naver Map', url:`https://map.naver.com/p/search/${enc(st.q)}`, icon:'i-nav', primary: !st.gen },
     gs
   ];
   if (st.region === 'CN'){
@@ -127,7 +127,9 @@ function actionsFor(st){
       gs
     ];
   }
-  return [gnav, gs];
+  /* A generic recommendation has no real address, so never offer turn-by-turn
+     navigation to an invented point — search the area instead. */
+  return st.gen ? [{ ...gs, primary:true }] : [gnav, gs];
 }
 
 async function copyText(t){
@@ -304,6 +306,7 @@ function stopHTML(st, lead){
       ${st.plans ? `<div class="plans">${st.plans.map(pl =>
           `<div class="plan"><b>${esc(pl.k)}</b><span>${esc(pl.d)}</span></div>`).join('')}</div>` : ''}
       ${area ? `<button class="areabtn" data-area="${st.a}">${icon('i-book')}Understand this area<i>→</i></button>` : ''}
+      ${st.gen ? `<p class="hint">Recommandation de zone, pas une adresse précise : le lien ouvre le quartier, à choisir sur place.</p>` : ''}
       ${st.region === 'CN' ? `<p class="hint">Les boutons DiDi et Alipay copient le nom chinois : collez-le comme destination dans l’app DiDi, ou dans le mini-programme DiDi d’Alipay ou WeChat.</p>` : ''}
       <div class="acts">
         ${actionsFor(st).map(a => a.copy
@@ -378,7 +381,7 @@ function paintMap(fit = true){
     const m = L.marker([st.lat, st.lng], {
       icon: L.divIcon({
         className:'', iconSize:[23,23], iconAnchor:[11.5,11.5],
-        html:`<div class="pin ${isPlace(st)?'place':''} ${st.o?'opt':''} ${done?'done':''}" data-id="${st.id}"><i>${st.n}</i></div>`
+        html:`<div class="pin ${isPlace(st)?'place':''} ${st.o?'opt':''} ${st.gen?'gen':''} ${done?'done':''}" data-id="${st.id}"><i>${st.n}</i></div>`
       }),
       keyboard:false, riseOnHover:true, title: st.name
     }).addTo(S.map);
@@ -583,9 +586,9 @@ function areaSheet(id){
   openSheet(a.name, `
     <div class="sheet-s"><p class="lede">${esc(a.one)}</p></div>
     <div class="sheet-s"><div class="card">
-      <div class="row"><span class="k">History</span><span class="v">${esc(a.h)}</span></div>
-      <div class="row"><span class="k">Today</span><span class="v">${esc(a.t)}</span></div>
-      <div class="row"><span class="k">Notice</span><span class="v">${esc(a.n)}</span></div>
+      <div class="row"><span class="k">Histoire</span><span class="v">${esc(a.h)}</span></div>
+      <div class="row"><span class="k">Aujourd’hui</span><span class="v">${esc(a.t)}</span></div>
+      <div class="row"><span class="k">À remarquer</span><span class="v">${esc(a.n)}</span></div>
     </div></div>`);
 }
 
@@ -600,16 +603,20 @@ function infoSheet(){
   const h = TRIP.hotels.map(x => `
     <a class="row" href="${mapsSearch(x)}" target="_blank" rel="noopener"><span class="k">${esc(x.dates.split(' ')[0])}</span><span class="v">
       <b>${esc(x.name)}</b><small>${esc(x.city)} · ${esc(x.area)} · ${esc(x.dates)}</small></span></a>`).join('');
-  const p = TRIP.priorities.map(x => `
+  const todo = TRIP.priorities.filter(x => x.state !== 'ok').map(x => `
     <button class="chk ${store.is('chk',x.id)?'on':''}" data-chk="${x.id}">
       <span class="box">${icon('i-check')}</span>
       <span class="t">${esc(x.label)}<small>${esc(x.note)}</small></span></button>`).join('');
+  const done = TRIP.priorities.filter(x => x.state === 'ok').map(x => `
+    <div class="chk on static"><span class="box">${icon('i-check')}</span>
+      <span class="t">${esc(x.label)}<small>${esc(x.note)}</small></span></div>`).join('');
   const t = TRIP.tastings.map(x => `
     <button class="chk ${store.is('chk',x.id)?'on':''}" data-chk="${x.id}">
       <span class="box">${icon('i-check')}</span><span class="t">${esc(x.label)}</span></button>`).join('');
 
   openSheet('Pratique', `
-    <div class="sheet-s"><h3>À réserver / à faire</h3><div class="card">${p}</div></div>
+    <div class="sheet-s"><h3>À réserver</h3><div class="card">${todo}</div></div>
+    <div class="sheet-s"><h3>Confirmé</h3><div class="card">${done}</div></div>
     <div class="sheet-s"><h3>Vols &amp; train</h3><div class="card">${f}</div></div>
     <div class="sheet-s"><h3>Hôtels</h3><div class="card">${h}</div></div>
     <div class="sheet-s"><h3>À goûter à Hong Kong</h3><div class="card">${t}</div></div>
