@@ -132,6 +132,39 @@ ol,ul{margin:0;padding:0;list-style:none}
 .mchip b{font-weight:600;color:var(--ink)}
 .mchip.go:active{background:var(--surface-2)}
 
+/* the three per-day blocks: must book / drop first / transport */
+.dblocks{
+  margin-top:10px;border:1px solid var(--line);border-radius:var(--r-s);
+  background:var(--surface);overflow:hidden;cursor:pointer
+}
+.dbl{
+  display:flex;gap:8px;align-items:baseline;margin:0;padding:7px 10px;
+  border-top:1px solid var(--line-2);font-size:12.5px;line-height:1.45
+}
+.dbl:first-child{border-top:0}
+.dbl b{
+  flex:none;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  width:74px;line-height:1.7
+}
+.dbl>span{
+  flex:1;min-width:0;color:var(--ink-2);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap
+}
+.dblocks.open .dbl>span{white-space:normal}
+.dbl .k-book{color:var(--accent)}
+.dbl .k-drop{color:var(--ink-3)}
+.dbl .k-tip{color:var(--ink-3)}
+.dbl.warn{
+  gap:7px;align-items:flex-start;background:var(--accent-soft);
+  color:var(--accent);font-weight:520;border-top:0
+}
+.dbl.warn .ico{width:13px;height:13px;flex:none;margin-top:2.5px}
+.dbl.warn span{
+  color:var(--accent);overflow:hidden;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical
+}
+.dblocks.open .dbl.warn span{-webkit-line-clamp:unset;display:block}
+
 /* ── map ─────────────────────────────────────────────────────────────── */
 .mapcard{
   position:sticky;top:calc(46px + env(safe-area-inset-top));z-index:40;
@@ -264,6 +297,8 @@ body.mapfull .mapdock::-webkit-scrollbar{display:none}
 }
 .tag.must{color:var(--accent);background:var(--accent-soft)}
 .tag.opt{color:var(--ink-3);border:1px solid var(--line)}
+.tag.book{color:#fff;background:var(--accent)}
+.tag.booked{color:var(--ok);background:var(--ok-soft)}
 .l2{display:flex;align-items:center;gap:5px;margin-top:2px;color:var(--ink-3);font-size:12px;min-width:0}
 .l2 .ico{width:12.5px;height:12.5px;flex:none}
 .l2 .txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -279,6 +314,10 @@ body.mapfull .mapdock::-webkit-scrollbar{display:none}
 .stop.open .stop-x{display:block;animation:reveal .22s var(--ease)}
 @keyframes reveal{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
 .stop-x p{margin:0 0 10px;font-size:13px;line-height:1.55;color:var(--ink-2);max-width:52ch}
+.stop-x p.hint{
+  font-size:12px;color:var(--ink-3);border-left:2px solid var(--line);
+  padding-left:9px;margin-top:-4px
+}
 .acts{display:flex;flex-wrap:wrap;gap:6px}
 .act{
   height:30px;padding:0 10px;border-radius:8px;border:1px solid var(--line);

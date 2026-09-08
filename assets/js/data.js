@@ -52,6 +52,7 @@ const TRIP = {
 /* ── 21 SEP ───────────────────────────────────────────────────────────── */
 { date: '2026-09-21', city: 'En vol', region: 'CH', label: 'Zurich → Hong Kong',
   focus: 'Départ en début d’après-midi, nuit dans l’avion.', hotel: null,
+  tip: 'Enregistrement en ligne dès 48h avant le départ. Economy Light : 1 pièce en soute incluse.',
   stops: [
     { s:'transit', k:'plane', m:1, name:'CX382 · Zurich ZRH → Hong Kong HKG', t:'13:30',
       note:'Départ Zurich 13h30, arrivée Hong Kong 06h55 le 22 septembre, Terminal 1. Durée 11h25. Economy Light, 1 pièce en soute incluse. Nuit dans l’avion.',
@@ -62,6 +63,8 @@ const TRIP = {
 { date: '2026-09-22', city: 'Hong Kong', region: 'HK', label: 'PoHo · Sheung Wan · Central',
   focus: 'Première immersion douce dans un Hong Kong ancien, créatif et branché, sans pression à cause du jet lag.',
   hotel: 0,
+  drop: ['Luk On Kui — un seul des deux dim sum suffit', 'PMQ si le jet lag pèse'],
+  tip: 'Airport Express jusqu’à Hong Kong Station, puis taxi vers Wan Chai. Prendre une Octopus dès l’aéroport.',
   stops: [
     { s:'morning', k:'plane', t:'06:55', name:'Arrivée HKG · Terminal 1',
       note:'Puis transfert vers l’hôtel et dépôt des bagages.', lat:22.3080, lng:113.9185, q:'Hong Kong International Airport Terminal 1' },
@@ -94,6 +97,8 @@ const TRIP = {
 { date: '2026-09-23', city: 'Hong Kong', region: 'HK', label: 'Sai Ying Pun · The Peak · Happy Valley',
   focus: 'Quartier résidentiel le matin, panorama iconique l’après-midi, puis vraie soirée hongkongaise aux courses.',
   hotel: 0,
+  drop: ['Kennedy Town', 'ArtLane'],
+  tip: 'Ding ding : prendre le tram historique vers Happy Valley en début de soirée. Une fois suffit — c’est un moyen de transport, pas une attraction. Peak Tram : file plus courte en fin d’après-midi.',
   stops: [
     { s:'morning', k:'walk', name:'Sai Ying Pun', note:'Quartier résidentiel, pentes et petits commerces.', lat:22.2860, lng:114.1420, q:'Sai Ying Pun Hong Kong' },
     { s:'morning', k:'cafe', name:'Fineprint', note:'Specialty coffee de quartier.', lat:22.2864, lng:114.1418, q:'Fineprint Sai Ying Pun' },
@@ -109,6 +114,7 @@ const TRIP = {
     { s:'afternoon', k:'view', m:1, name:'Victoria Peak', note:'Panorama iconique.', lat:22.2712, lng:114.1500, q:'Victoria Peak Hong Kong' },
     { s:'afternoon', k:'nature', m:1, name:'Peak Circle Walk · Lugard Rd + Harlech Rd', note:'Prévoir 1h15–1h30. Rester jusqu’au coucher du soleil puis aux premières lumières de la skyline.', lat:22.2718, lng:114.1443, q:'Lugard Road Victoria Peak' },
 
+    { s:'evening', k:'transit', name:'Ding ding · tram vers Happy Valley', note:'Le tram historique a une boucle dédiée Happy Valley. À prendre comme moyen de transport, pas comme attraction : une fois dans le séjour suffit, et ça complète parfaitement le Star Ferry.', lat:22.2800, lng:114.1720, q:'Hong Kong Tramways Happy Valley' },
     { s:'evening', k:'sight', m:1, name:'Happy Valley Racecourse', note:'Regarder plusieurs courses, boire un verre et parier de petites sommes pour l’expérience.', lat:22.2718, lng:114.1822, q:'Happy Valley Racecourse Hong Kong' },
     { s:'evening', k:'bar', name:'The Savory Project', note:'Cocktails salés, Dirty Martini.', lat:22.2823, lng:114.1512, q:'The Savory Project Hong Kong' },
     { s:'evening', k:'bar', o:1, name:'Bar Leone', note:'Si pas fait la veille.', lat:22.2843, lng:114.1516, q:'Bar Leone Hong Kong' }
@@ -118,6 +124,9 @@ const TRIP = {
 { date: '2026-09-24', city: 'Hong Kong', region: 'HK', label: 'Sham Shui Po · Mong Kok · Tai Hang',
   focus: 'Journée la plus locale et créative, entre vieux commerces, street food, ateliers, design et quartiers ultra-denses.',
   hotel: 0,
+  alert: 'Fire Dragon confirmé du 24 au 26 septembre à Tai Hang. Être sur place 19h00–19h15 ; danse publiée ~19h30–22h30. Lanternes de Victoria Park allumées 18h30–23h00, juste à côté.',
+  drop: ['Jordan', 'Yau Ma Tei — ne sacrifiez pas la soirée pour les marchés'],
+  tip: 'Quitter Kowloon à 18h00 au plus tard. MTR Yau Ma Tei → Tin Hau (~25 min), puis 8 min à pied jusqu’à Tai Hang.',
   stops: [
     { s:'morning', k:'walk', m:1, name:'Sham Shui Po', note:'Mini food crawl plutôt qu’un gros déjeuner.', lat:22.3303, lng:114.1622, q:'Sham Shui Po Hong Kong' },
     { s:'morning', k:'shop', name:'Tai Nan Street', note:'Ateliers, merceries et jeunes boutiques.', lat:22.3288, lng:114.1615, q:'Tai Nan Street Sham Shui Po' },
@@ -130,42 +139,48 @@ const TRIP = {
 
     { s:'afternoon', k:'shop', name:'Twemco · Tai Kok Tsui', note:'Flip clocks fabriquées à Hong Kong.', lat:22.3220, lng:114.1620, q:'Twemco Tai Kok Tsui' },
     { s:'afternoon', k:'walk', name:'Mong Kok', note:'Quartier ultra-dense.', lat:22.3193, lng:114.1694, q:'Mong Kok Hong Kong' },
-    { s:'afternoon', k:'walk', name:'Yau Ma Tei', note:'Pas besoin de consacrer du temps spécifiquement à Ladies’ Market / Temple Street.', lat:22.3110, lng:114.1706, q:'Yau Ma Tei Hong Kong' },
-    { s:'afternoon', k:'walk', o:1, name:'Jordan', note:'En prolongement vers le sud.', lat:22.3048, lng:114.1716, q:'Jordan Hong Kong' },
+    { s:'afternoon', k:'walk', name:'Yau Ma Tei', note:'Pas besoin de consacrer du temps spécifiquement à Ladies’ Market / Temple Street. Les marchés ne valent pas de rogner sur la soirée.', lat:22.3110, lng:114.1706, q:'Yau Ma Tei Hong Kong' },
+    { s:'afternoon', k:'walk', o:1, name:'Jordan', note:'En prolongement vers le sud, seulement si vous êtes en avance.', lat:22.3048, lng:114.1716, q:'Jordan Hong Kong' },
+    { s:'afternoon', k:'transit', m:1, t:'18:00', name:'Quitter Kowloon', note:'Heure limite. MTR Yau Ma Tei → Tin Hau, environ 25 min, puis 8 min à pied jusqu’à Tai Hang.', lat:22.3110, lng:114.1706, q:'Yau Ma Tei MTR Station' },
 
-    { s:'evening', k:'sight', m:1, name:'Tai Hang Fire Dragon Dance', note:'Vraie priorité de la journée. Retour vers Tai Hang en fin d’après-midi.', lat:22.2792, lng:114.1905, q:'Tai Hang Fire Dragon Dance' },
-    { s:'evening', k:'sight', o:1, name:'Victoria Park · lanternes', note:'Éventuellement, après le dragon.', lat:22.2822, lng:114.1885, q:'Victoria Park Hong Kong' },
-    { s:'evening', k:'food', name:'Dîner Tai Hang / Causeway Bay', note:'Autour de Tai Hang ou Causeway Bay.', lat:22.2800, lng:114.1855, q:'Tai Hang restaurants Hong Kong' }
+    { s:'evening', k:'sight', m:1, t:'19:00', name:'Tai Hang · Fire Dragon Dance', note:'Le moment le plus spécial du voyage. Confirmé du 24 au 26 septembre. Être sur place 19h00–19h15 : la danse est publiée entre 19h30 et 22h30, et les ruelles se remplissent vite. Ne pas arriver tard après avoir traîné à Jordan.', lat:22.2792, lng:114.1905, q:'Tai Hang Fire Dragon Dance' },
+    { s:'evening', k:'sight', m:1, t:'21:00', name:'Victoria Park · lanternes', note:'Juste à côté de Tai Hang, 10 min à pied. Lanternes éclairées de 18h30 à 23h00, donc aucune raison de courir : faites le dragon d’abord.', lat:22.2822, lng:114.1885, q:'Victoria Park Hong Kong' },
+    { s:'evening', k:'food', name:'Dîner Tai Hang / Causeway Bay', note:'Autour de Tai Hang ou Causeway Bay, après ou entre les deux.', lat:22.2800, lng:114.1855, q:'Tai Hang restaurants Hong Kong' }
   ]},
 
 /* ── 25 SEP ───────────────────────────────────────────────────────────── */
 { date: '2026-09-25', city: 'Shenzhen', region: 'CN', label: 'Futian · Nanshan · OCT-LOFT · Luohu',
   focus: 'Rupture totale avec Hong Kong : métropole chinoise récente, architecture monumentale, tech, design et scène créative.',
   hotel: 0,
+  book: ['Visa ou permis pour la Chine continentale — à vérifier bien avant le départ'],
+  drop: ['DJI Flagship Store', 'Robotaxi Pony.ai si l’attente est longue'],
+  tip: 'DiDi fonctionne avec un numéro étranger et une carte internationale ; sinon passez par le mini-programme DiDi dans Alipay ou WeChat. Copiez toujours le nom chinois de la destination avant de commander.',
   stops: [
-    { s:'morning', k:'transit', m:1, name:'Passage de la frontière · Futian', note:'Passeport + visa/permis. Départ tôt.', lat:22.5164, lng:114.0700, q:'Futian Checkpoint Shenzhen' },
-    { s:'morning', k:'sight', name:'Civic Center', note:'Architecture monumentale.', lat:22.5460, lng:114.0590, q:'Shenzhen Civic Center' },
-    { s:'morning', k:'nature', name:'Lianhuashan Park', note:'Vue sur le skyline de Futian depuis la colline.', lat:22.5560, lng:114.0560, q:'Lianhuashan Park Shenzhen' },
-    { s:'morning', k:'nature', name:'Shenzhen Talent Park', note:'DiDi vers Nanshan en fin de matinée. Si possible, tester une livraison Meituan par drone.', lat:22.5180, lng:113.9440, q:'Shenzhen Talent Park' },
+    { s:'morning', k:'transit', m:1, zh:'福田口岸', name:'Passage de la frontière · Futian', note:'Passeport + visa/permis. Départ tôt.', lat:22.5164, lng:114.0700, q:'Futian Checkpoint Shenzhen' },
+    { s:'morning', k:'sight', zh:'深圳市民中心', name:'Civic Center', note:'Architecture monumentale.', lat:22.5460, lng:114.0590, q:'Shenzhen Civic Center' },
+    { s:'morning', k:'nature', zh:'莲花山公园', name:'Lianhuashan Park', note:'Vue sur le skyline de Futian depuis la colline.', lat:22.5560, lng:114.0560, q:'Lianhuashan Park Shenzhen' },
+    { s:'morning', k:'nature', zh:'深圳人才公园', name:'Shenzhen Talent Park', note:'DiDi vers Nanshan en fin de matinée. Si possible, tester une livraison Meituan par drone.', lat:22.5180, lng:113.9440, q:'Shenzhen Talent Park' },
 
-    { s:'lunch', k:'food', m:1, name:'Baheli Haiji Beef Hotpot', note:'Chaoshan beef hotpot. Nanshan.', lat:22.5280, lng:113.9330, q:'Baheli Haiji Beef Hotpot Nanshan Shenzhen' },
+    { s:'lunch', k:'food', m:1, zh:'八合里海记牛肉店 南山', name:'Baheli Haiji Beef Hotpot', note:'Chaoshan beef hotpot. Nanshan.', lat:22.5280, lng:113.9330, q:'Baheli Haiji Beef Hotpot Nanshan Shenzhen' },
     { s:'lunch', k:'food', o:1, name:'Chao Shan Da Mu Beef Hotpot City', note:'Alternative.', lat:22.5310, lng:113.9300, q:'Chao Shan Da Mu Beef Hotpot Shenzhen' },
 
-    { s:'afternoon', k:'transit', o:1, name:'Robotaxi Pony.ai · Nanshan / Qianhai', note:'Si disponible, faire un trajet en robotaxi.', lat:22.5300, lng:113.8900, q:'Qianhai Shenzhen' },
-    { s:'afternoon', k:'shop', m:1, name:'OCT-LOFT', note:'Ancienne zone industrielle devenue quartier créatif.', lat:22.5450, lng:113.9860, q:'OCT-LOFT Shenzhen' },
-    { s:'afternoon', k:'shop', name:'Old Heaven', note:'Librairie, musique, vinyles et art.', lat:22.5452, lng:113.9866, q:'Old Heaven Books OCT-LOFT Shenzhen' },
-    { s:'afternoon', k:'shop', o:1, name:'DJI Flagship Store · OCT Harbour', note:'Éventuellement, en milieu d’après-midi.', lat:22.5210, lng:113.9880, q:'DJI Flagship Store OCT Harbour Shenzhen' },
-    { s:'afternoon', k:'shop', name:'Huaqiangbei · SEG Plaza', note:'Le plus grand marché électronique du monde. Fin d’après-midi.', lat:22.5473, lng:114.0862, q:'SEG Plaza Huaqiangbei Shenzhen' },
+    { s:'afternoon', k:'transit', o:1, zh:'前海', name:'Robotaxi Pony.ai · Nanshan / Qianhai', note:'Si disponible, faire un trajet en robotaxi.', lat:22.5300, lng:113.8900, q:'Qianhai Shenzhen' },
+    { s:'afternoon', k:'shop', m:1, zh:'华侨城创意文化园 OCT-LOFT', name:'OCT-LOFT', note:'Ancienne zone industrielle devenue quartier créatif.', lat:22.5450, lng:113.9860, q:'OCT-LOFT Shenzhen' },
+    { s:'afternoon', k:'shop', zh:'旧天堂书店 华侨城创意文化园', name:'Old Heaven', note:'Librairie, musique, vinyles et art.', lat:22.5452, lng:113.9866, q:'Old Heaven Books OCT-LOFT Shenzhen' },
+    { s:'afternoon', k:'shop', o:1, zh:'大疆旗舰店 欢乐海岸', name:'DJI Flagship Store · OCT Harbour', note:'Éventuellement, en milieu d’après-midi.', lat:22.5210, lng:113.9880, q:'DJI Flagship Store OCT Harbour Shenzhen' },
+    { s:'afternoon', k:'shop', zh:'华强北 赛格广场', name:'Huaqiangbei · SEG Plaza', note:'Le plus grand marché électronique du monde. Fin d’après-midi.', lat:22.5473, lng:114.0862, q:'SEG Plaza Huaqiangbei Shenzhen' },
 
-    { s:'evening', k:'view', m:1, t:'17:00', name:'Drawing Room · St. Regis, 96e étage', note:'DiDi vers The St. Regis Shenzhen dans KK100 vers 17h–17h30, puis Drawing Room pour voir la ville s’illuminer.', lat:22.5450, lng:114.1080, q:'The St. Regis Shenzhen KK100' },
-    { s:'evening', k:'bar', o:1, name:'St. Regis Bar', note:'Éventuellement un cocktail avant de redescendre.', lat:22.5450, lng:114.1080, q:'St. Regis Bar Shenzhen' },
-    { s:'evening', k:'transit', name:'Frontière de Luohu → Hong Kong', note:'Retour à Hong Kong en fin de soirée.', lat:22.5320, lng:114.1160, q:'Luohu Port Shenzhen' }
+    { s:'evening', k:'view', m:1, t:'17:00', zh:'深圳瑞吉酒店 京基100', name:'Drawing Room · St. Regis, 96e étage', note:'DiDi vers The St. Regis Shenzhen dans KK100 vers 17h–17h30, puis Drawing Room pour voir la ville s’illuminer.', lat:22.5450, lng:114.1080, q:'The St. Regis Shenzhen KK100' },
+    { s:'evening', k:'bar', o:1, zh:'深圳瑞吉酒店 京基100', name:'St. Regis Bar', note:'Éventuellement un cocktail avant de redescendre.', lat:22.5450, lng:114.1080, q:'St. Regis Bar Shenzhen' },
+    { s:'evening', k:'transit', zh:'罗湖口岸', name:'Frontière de Luohu → Hong Kong', note:'Retour à Hong Kong en fin de soirée.', lat:22.5320, lng:114.1160, q:'Luohu Port Shenzhen' }
   ]},
 
 /* ── 26 SEP ───────────────────────────────────────────────────────────── */
 { date: '2026-09-26', city: 'Hong Kong', region: 'HK', label: 'Sai Kung · Tai Long Wan · plage',
   focus: 'Vraie coupure nature avec mer, montagne et plage, puis grosse soirée en ville.',
   hotel: 0,
+  drop: ['Le retour à pied — prendre le bateau depuis Ham Tin si la journée est longue', 'Sing Kee'],
+  tip: 'Sai Kung Town → Sai Wan Pavilion en taxi (~20 min) ou minibus NR29. Vérifier sur place l’heure du dernier bateau Ham Tin → Sai Kung.',
   stops: [
     { s:'morning', k:'walk', name:'Sai Kung Town', note:'Point de départ. Minibus / taxi vers Sai Wan Pavilion.', lat:22.3817, lng:114.2712, q:'Sai Kung Town Hong Kong' },
     { s:'morning', k:'nature', m:1, name:'Sai Wan Pavilion · départ randonnée', note:'Début du sentier vers Sai Wan / Tai Long Wan.', lat:22.3960, lng:114.3560, q:'Sai Wan Pavilion Sai Kung' },
@@ -187,9 +202,12 @@ const TRIP = {
 { date: '2026-09-27', city: 'Hong Kong', region: 'HK', label: 'West Kowloon · M+ · Tsim Sha Tsui',
   focus: 'Dernière journée facile : design et culture contemporaine, Kowloon et skyline, puis grande dernière soirée.',
   hotel: 0,
+  book: ['Le dîner du soir — le meilleur du séjour, à réserver'],
+  drop: ['Jordan', 'Kapok'],
+  tip: 'Star Ferry TST → Central au moment du blue hour : le meilleur rapport temps / vue de la ville.',
   stops: [
     { s:'morning', k:'walk', name:'West Kowloon Cultural District', note:'Fin de matinée, promenade au bord de l’eau.', lat:22.3020, lng:114.1600, q:'West Kowloon Cultural District' },
-    { s:'morning', k:'museum', m:1, name:'M+', note:'Musée de la culture visuelle contemporaine.', lat:22.3020, lng:114.1580, q:'M+ Museum Hong Kong' },
+    { s:'morning', k:'museum', m:1, name:'M+', note:'Musée de la culture visuelle contemporaine. Dimanche : 10h–18h.', lat:22.3020, lng:114.1580, q:'M+ Museum Hong Kong' },
     { s:'morning', k:'shop', name:'M+ Shop', note:'Livres et design asiatique.', lat:22.3021, lng:114.1583, q:'M+ Shop Hong Kong' },
 
     { s:'lunch', k:'food', name:'Mak Man Kee', note:'Wonton noodles.', lat:22.3060, lng:114.1700, q:'Mak Man Kee Noodle Shop Jordan' },
@@ -200,13 +218,15 @@ const TRIP = {
 
     { s:'evening', k:'view', m:1, name:'Avenue of Stars', note:'Attendre les lumières.', lat:22.2935, lng:114.1740, q:'Avenue of Stars Hong Kong' },
     { s:'evening', k:'transit', m:1, name:'Star Ferry · nuit / blue hour', note:'TST → Central au moment des lumières.', lat:22.2937, lng:114.1685, q:'Star Ferry Pier Tsim Sha Tsui' },
-    { s:'evening', k:'food', m:1, name:'Dîner — le meilleur du séjour', note:'Dîner réservé, puis dernier cocktail.', lat:22.2820, lng:114.1560, q:'Central Hong Kong fine dining' }
+    { s:'evening', k:'food', m:1, b:'must', name:'Dîner — le meilleur du séjour', note:'Le dîner réservé du séjour, puis dernier cocktail.', lat:22.2820, lng:114.1560, q:'Central Hong Kong fine dining' }
   ]},
 
 /* ── 28 SEP ───────────────────────────────────────────────────────────── */
 { date: '2026-09-28', city: 'Busan', region: 'KR', label: 'Hong Kong → Busan · Haeundae · Gwangalli',
   focus: 'Vol du matin, puis premier contact avec la mer de Busan et les néons de Gwangalli.',
   hotel: 1,
+  drop: ['Marine City', 'Dongbaekseom si l’arrivée traîne'],
+  tip: 'Gimhae → Haeundae : ~50 min en taxi. Acheter une T-money ou Cashbee à l’aéroport.',
   stops: [
     { s:'morning', k:'plane', m:1, t:'09:10', name:'CX5674 · HKG T2 → Busan Gimhae PUS', note:'Départ 09h10, arrivée 13h35. Durée 3h25. Commercialisé par Cathay Pacific, opéré par Hong Kong Express Airways. Economy Light, 1 pièce en soute.', lat:22.3170, lng:113.9350, q:'Hong Kong International Airport Terminal 2' },
 
@@ -226,6 +246,9 @@ const TRIP = {
 { date: '2026-09-29', city: 'Busan', region: 'KR', label: 'Yonggungsa · Cheongsapo · Sky Capsule',
   focus: 'Grande journée iconique de Busan entre temple, mer, petits villages et Sky Capsule.',
   hotel: 1,
+  book: ['Sky Capsule 17h30, Cheongsapo → Mipo — réservation confirmée'],
+  drop: ['Songjeong Beach', 'Daritdol Observatory si vous êtes juste avant 17h00'],
+  tip: 'Yonggungsa tôt : bus 181 depuis Haeundae ou taxi (~20 min). Être à la station Cheongsapo à 17h00 pour la capsule de 17h30.',
   stops: [
     { s:'morning', k:'sight', m:1, name:'Haedong Yonggungsa', note:'Temple au bord de la mer. Y aller tôt.', lat:35.1884, lng:129.2233, q:'Haedong Yonggungsa Temple' },
 
@@ -237,7 +260,7 @@ const TRIP = {
     { s:'afternoon', k:'walk', name:'Haeundae Green Railway', note:'Ancienne voie ferrée côtière.', lat:35.1600, lng:129.1900, q:'Haeundae Blueline Park Green Railway' },
     { s:'afternoon', k:'transit', m:1, t:'17:00', name:'Station Sky Capsule Cheongsapo', note:'Arriver vers 17h00 pour la réservation de 17h30.', lat:35.1601, lng:129.1932, q:'Cheongsapo Sky Capsule Station' },
 
-    { s:'evening', k:'view', m:1, t:'17:30', name:'Sky Capsule · Cheongsapo → Mipo', note:'Réservation confirmée. Environ 30 min.', lat:35.1610, lng:129.1720, q:'Mipo Sky Capsule Station' },
+    { s:'evening', k:'view', m:1, b:'ok', t:'17:30', name:'Sky Capsule · Cheongsapo → Mipo', note:'Réservation confirmée. Environ 30 min.', lat:35.1610, lng:129.1720, q:'Mipo Sky Capsule Station' },
     { s:'evening', k:'walk', name:'Mipo → Haeundae Beach → L7', note:'Promenade le long de la plage en début de soirée.', lat:35.1595, lng:129.1650, q:'Haeundae Beach walk Busan' },
     { s:'evening', k:'food', m:1, name:'Haeundae Rib Barbecue Restaurant', note:'Galbi de Haeundae.', lat:35.1621, lng:129.1616, q:'Haeundae Rib Barbecue Restaurant' },
     { s:'evening', k:'food', o:1, name:'Kumsu Bokguk', note:'Si pas fait la veille.', lat:35.1628, lng:129.1608, q:'Kumsu Bokguk Haeundae' },
@@ -248,16 +271,21 @@ const TRIP = {
 { date: '2026-09-30', city: 'Busan → Séoul', region: 'KR', label: 'Gamcheon · Jagalchi · KTX → Séoul',
   focus: 'Matinée dense à Busan, KTX en début d’après-midi, arrivée douce à Séoul.',
   hotel: 2,
+  alert: 'Journée minutée. 08h00 départ L7 · 08h45 bagages en consigne · 09h15 Gamcheon · 10h45 Nampo / Jagalchi · 12h30 déjeuner · 13h30 bagages · 14h47 KTX.',
+  book: ['KTX046 14h47 — voiture 1, siège 7B, billet confirmé'],
+  drop: ['BIFF Square', 'Nampo-dong — Gamcheon et Jagalchi d’abord'],
+  tip: 'Taxis entre les étapes plutôt que le métro, sinon vous passerez la matinée à regarder l’heure. Consigne à Busan Station dès 08h45.',
   stops: [
-    { s:'morning', k:'hotel', name:'Check-out L7 · bagages à Busan Station', note:'Déposer les bagages en consigne à Busan Station avant Gamcheon.', lat:35.1150, lng:129.0420, q:'Busan Station' },
-    { s:'morning', k:'sight', m:1, name:'Gamcheon Culture Village', note:'Taxi depuis Busan Station.', lat:35.0975, lng:129.0106, q:'Gamcheon Culture Village' },
-    { s:'morning', k:'walk', name:'Nampo-dong · BIFF Square', note:'Stands de street food de BIFF Square.', lat:35.0982, lng:129.0281, q:'BIFF Square Nampo-dong Busan' },
-    { s:'morning', k:'market', m:1, name:'Jagalchi Market', note:'Le grand marché aux poissons de Busan.', lat:35.0966, lng:129.0305, q:'Jagalchi Market Busan' },
+    { s:'morning', k:'hotel', m:1, t:'08:00', name:'Check-out L7 Haeundae', note:'Départ ferme à 08h00 : toute la matinée en dépend.', lat:35.1607, lng:129.1613, q:'L7 Haeundae by LOTTE' },
+    { s:'morning', k:'transit', m:1, t:'08:45', name:'Bagages en consigne · Busan Station', note:'08h45–09h00. Casiers ou consigne de la gare, puis taxi direct vers Gamcheon.', lat:35.1150, lng:129.0420, q:'Busan Station' },
+    { s:'morning', k:'sight', m:1, t:'09:15', name:'Gamcheon Culture Village', note:'Taxi depuis Busan Station, environ 20 min. Compter 1h15 sur place.', lat:35.0975, lng:129.0106, q:'Gamcheon Culture Village' },
+    { s:'morning', k:'walk', t:'10:45', name:'Nampo-dong · BIFF Square', note:'Taxi depuis Gamcheon. Stands de street food de BIFF Square, en passant.', lat:35.0982, lng:129.0281, q:'BIFF Square Nampo-dong Busan' },
+    { s:'morning', k:'market', m:1, name:'Jagalchi Market', note:'Le grand marché aux poissons de Busan, cinq minutes à pied de BIFF Square.', lat:35.0966, lng:129.0305, q:'Jagalchi Market Busan' },
 
-    { s:'lunch', k:'food', m:1, name:'Bonjeon Dwaeji Gukbap', note:'Soupe porc-riz typique de Busan.', lat:35.1140, lng:129.0410, q:'Bonjeon Dwaeji Gukbap Busan' },
-    { s:'lunch', k:'transit', t:'13:30', name:'Récupérer les bagages · Busan Station', note:'Vers 13h30, avant le KTX.', lat:35.1150, lng:129.0420, q:'Busan Station' },
+    { s:'lunch', k:'food', m:1, t:'12:30', name:'Bonjeon Dwaeji Gukbap', note:'Soupe porc-riz typique de Busan. Taxi depuis Jagalchi.', lat:35.1140, lng:129.0410, q:'Bonjeon Dwaeji Gukbap Busan' },
+    { s:'lunch', k:'transit', m:1, t:'13:30', name:'Récupérer les bagages · Busan Station', note:'13h30 : une heure de marge avant le départ.', lat:35.1150, lng:129.0420, q:'Busan Station' },
 
-    { s:'afternoon', k:'transit', m:1, t:'14:47', name:'KTX046 · Busan → Seoul Station', note:'Départ 14h47, arrivée 17h28. Durée 2h41. Voiture 1, siège 7B (dos à la marche). Economy / Adult, KRW 53 500. Ticket 80022-0903-10020-03.', lat:35.1150, lng:129.0420, q:'Busan Station KTX' },
+    { s:'afternoon', k:'transit', m:1, b:'ok', t:'14:47', name:'KTX046 · Busan → Seoul Station', note:'Départ 14h47, arrivée 17h28. Durée 2h41. Voiture 1, siège 7B (dos à la marche). Economy / Adult, KRW 53 500. Ticket 80022-0903-10020-03.', lat:35.1150, lng:129.0420, q:'Busan Station KTX' },
     { s:'afternoon', k:'hotel', t:'17:28', name:'Seoul Station → Nine Brick Hotel Hongdae', note:'Transfert puis check-in.', lat:37.5553, lng:126.9233, q:'Nine Brick Hotel Hongdae' },
 
     { s:'evening', k:'food', name:'Dîner tranquille · Hongdae', note:'Sans programme lourd.', lat:37.5560, lng:126.9240, q:'Hongdae restaurants Seoul' },
@@ -268,6 +296,10 @@ const TRIP = {
 { date: '2026-10-01', city: 'Séoul', region: 'KR', label: 'Yeonnam · Seochon · Bukchon · Gyeongbokgung',
   focus: 'Commencer doucement autour de l’hôtel et du rendez-vous skincare, puis vieux Séoul, patrimoine, cafés et soirée.',
   hotel: 2,
+  alert: 'Le 1er octobre, la visite nocturne de Gyeongbokgung s’accompagne de performances de musique et de danse de cour. Réserver maintenant.',
+  book: ['Gyeongbokgung, visite nocturne 19h00 — dernière entrée 20h30, 3 300 places par soir dont 300 sur place pour les étrangers', 'Bar Cham — réservation recommandée, jeudi 18h–01h'],
+  drop: ['Cheonggyecheon — à supprimer en premier', 'Ikseon-dong', 'Woo Lae Oak si vous êtes en retard'],
+  tip: 'Colonne vertébrale à garder : Forena → Yeonnam → Seochon → Bukchon → Gyeongbokgung de nuit. Taxi Yeonnam → Seochon (~20 min). Gyeongbokgung ↔ Bar Cham : 8 min à pied.',
   stops: [
     { s:'morning', k:'sight', m:1, t:'10:00', name:'Forena Clinic Hongdae', note:'7th Floor, H-CUBE, 140 Yanghwa-ro. Horaire compatible avec les heures d’ouverture du jeudi.', lat:37.5555, lng:126.9236, q:'Forena Clinic Hongdae 140 Yanghwa-ro' },
     { s:'morning', k:'cafe', name:'Centralsite Coffee Roasters Yeonnam', note:'Fin de matinée à Yeonnam-dong.', lat:37.5630, lng:126.9245, q:'Centralsite Coffee Roasters Yeonnam' },
@@ -279,14 +311,14 @@ const TRIP = {
     { s:'afternoon', k:'walk', name:'Seochon', note:'Ruelles et petites boutiques à l’ouest du palais.', lat:37.5790, lng:126.9705, q:'Seochon Village Seoul' },
     { s:'afternoon', k:'food', o:1, name:'Hwangsaengga Kalguksu', note:'Option déjeuner dans le secteur.', lat:37.5817, lng:126.9838, q:'Hwangsaengga Kalguksu Bukchon' },
     { s:'afternoon', k:'sight', m:1, name:'Bukchon Hanok Village', note:'Village de hanok entre les deux palais.', lat:37.5826, lng:126.9850, q:'Bukchon Hanok Village' },
-    { s:'afternoon', k:'walk', name:'Ikseon-dong', note:'Hanok reconvertis, cafés et boutiques.', lat:37.5740, lng:126.9895, q:'Ikseon-dong Seoul' },
-    { s:'afternoon', k:'walk', o:1, name:'Cheonggyecheon', note:'Éventuellement, en descendant vers Euljiro.', lat:37.5690, lng:126.9840, q:'Cheonggyecheon Stream Seoul' },
+    { s:'afternoon', k:'walk', o:1, name:'Ikseon-dong', note:'Hanok reconvertis, cafés et boutiques. Optionnel : à sacrifier si la journée prend du retard.', lat:37.5740, lng:126.9895, q:'Ikseon-dong Seoul' },
+    { s:'afternoon', k:'walk', o:1, name:'Cheonggyecheon', note:'Le premier à supprimer si vous êtes en retard.', lat:37.5690, lng:126.9840, q:'Cheonggyecheon Stream Seoul' },
     { s:'afternoon', k:'cafe', name:'Coffee Hanyakbang', note:'Café rétro caché dans une ruelle d’Euljiro. Ouvert jusqu’à 22h au rez-de-chaussée.', lat:37.5673, lng:126.9910, q:'Coffee Hanyakbang Euljiro' },
 
     { s:'evening', k:'food', t:'17:15', name:'Woo Lae Oak · dîner tôt', note:'Pyongyang naengmyeon et bulgogi. Placé ici car il ferme vers 21h et il peut y avoir de l’attente. Si vous voulez absolument le faire.', lat:37.5673, lng:126.9958, q:'Woo Lae Oak Seoul' },
     { s:'evening', k:'food', o:1, name:'Maksamga Euljiro', note:'Alternative plus tardive et plus brute.', lat:37.5665, lng:126.9915, q:'Maksamga Euljiro' },
-    { s:'evening', k:'sight', m:1, t:'19:00', name:'Gyeongbokgung · visite nocturne', note:'Rejoindre vers 18h40. Ouverture 19h–21h30, dernière entrée 20h30. À réserver maintenant plutôt que compter sur les billets sur place : 3 300 places par soir, dont seulement 300 sur place pour les étrangers. Bonus : performances de musique et danse de cour du 30 sep au 2 oct.', lat:37.5796, lng:126.9770, q:'Gyeongbokgung Palace' },
-    { s:'evening', k:'bar', m:1, t:'20:45', name:'Bar Cham', note:'Cocktails autour d’alcools et ingrédients coréens. À Seochon, juste à côté du palais. Jeudi 18h–01h, réservation recommandée.', lat:37.5768, lng:126.9705, q:'Bar Cham Seoul' },
+    { s:'evening', k:'sight', m:1, b:'must', t:'19:00', name:'Gyeongbokgung · visite nocturne', note:'La pièce maîtresse de la journée. Rejoindre vers 18h40. Confirmé 19h00–21h30, dernière entrée 20h30. À réserver maintenant plutôt que compter sur les billets sur place : 3 300 places par soir, dont seulement 300 sur place réservées aux étrangers. Le 1er octobre, performances de musique et de danse de cour.', lat:37.5796, lng:126.9770, q:'Gyeongbokgung Palace' },
+    { s:'evening', k:'bar', m:1, b:'must', t:'20:45', name:'Bar Cham', note:'Cocktails autour d’alcools et ingrédients coréens. À Seochon, juste à côté du palais. Jeudi 18h–01h, réservation recommandée.', lat:37.5768, lng:126.9705, q:'Bar Cham Seoul' },
     { s:'evening', k:'bar', o:1, name:'Euljiro late-night', note:'Si vous avez encore de l’énergie : bars, ruelles et late-night food.', lat:37.5665, lng:126.9920, q:'Euljiro Seoul bars' }
   ]},
 
@@ -294,6 +326,9 @@ const TRIP = {
 { date: '2026-10-02', city: 'Séoul', region: 'KR', label: 'Seongsu · Dosan · Apgujeong · Cheongdam',
   focus: 'Séoul contemporain : anciens entrepôts, mode coréenne, specialty coffee et architecture retail, puis design et cocktails au sud de la ville.',
   hotel: 2,
+  book: ['Gebangsikdang Seongsu — réservation recommandée, 11h30–15h'],
+  drop: ['Point of View', 'Apgujeong Rodeo'],
+  tip: 'Seoul Forest et le café d’abord : MUSINSA EMPTY n’ouvre qu’à 11h. Taxi Seongsu → Dosan (~25 min).',
   stops: [
     { s:'morning', k:'nature', name:'Seoul Forest', note:'Faire le parc et le café en premier : MUSINSA EMPTY n’ouvre qu’à 11h.', lat:37.5444, lng:127.0374, q:'Seoul Forest Park' },
     { s:'morning', k:'cafe', name:'LowKey Seongsu', note:'Specialty coffee.', lat:37.5430, lng:127.0560, q:'LowKey Coffee Seongsu' },
@@ -301,7 +336,7 @@ const TRIP = {
     { s:'morning', k:'shop', name:'MUSINSA EMPTY SEONGSU', note:'Ouvre à 11h.', lat:37.5448, lng:127.0553, q:'MUSINSA EMPTY Seongsu' },
     { s:'morning', k:'shop', name:'Point of View', note:'Papeterie et objets d’écriture.', lat:37.5433, lng:127.0568, q:'Point of View Seongsu' },
 
-    { s:'lunch', k:'food', m:1, name:'Gebangsikdang Seongsu', note:'Ganjang-gejang (crabe mariné à la sauce soja) et autres plats coréens. 11h30–15h avant la pause, réservation recommandée. Ggupdang Seongsu est retiré du déjeuner : horaires de semaine trop tardifs pour le planning.', lat:37.5420, lng:127.0530, q:'Gebangsikdang Seongsu' },
+    { s:'lunch', k:'food', m:1, b:'must', name:'Gebangsikdang Seongsu', note:'Ganjang-gejang (crabe mariné à la sauce soja) et autres plats coréens. 11h30–15h avant la pause, réservation recommandée. Ggupdang Seongsu est retiré du déjeuner : horaires de semaine trop tardifs pour le planning.', lat:37.5420, lng:127.0530, q:'Gebangsikdang Seongsu' },
 
     { s:'afternoon', k:'nature', name:'Dosan Park', note:'Taxi depuis Seongsu, puis balade autour du parc.', lat:37.5240, lng:127.0350, q:'Dosan Park Seoul' },
     { s:'afternoon', k:'shop', m:1, name:'GENTLE MONSTER HAUS NOWHERE DOSAN', note:'Flagship spectaculaire. Ouvert 11h–21h tous les jours.', lat:37.5236, lng:127.0367, q:'Haus Nowhere Dosan Gentle Monster' },
@@ -317,14 +352,18 @@ const TRIP = {
 { date: '2026-10-03', city: 'Séoul', region: 'KR', label: 'Hannam · Leeum · Itaewon · Namsan',
   focus: 'Journée lifestyle et arty avec architecture, design, art contemporain, puis panorama sur Séoul et vraie soirée.',
   hotel: 2,
+  alert: 'National Foundation Day (개천절) — jour férié. Séoul sera plus fréquenté, Namsan en particulier.',
+  book: ['Leeum Museum — réserver dès l’ouverture de la fenêtre, 14 jours avant'],
+  drop: ['Itaewon', 'Cakeshop'],
+  tip: 'Jour férié : monter à Namsan assez tôt avant le coucher du soleil. Le sentier depuis Hannam / Itaewon évite la file du téléphérique.',
   stops: [
     { s:'morning', k:'walk', m:1, name:'Hannam-dong', note:'Petites rues, boutiques indépendantes, galeries et cafés.', lat:37.5340, lng:127.0000, q:'Hannam-dong Seoul' },
 
     { s:'lunch', k:'food', name:'Tadak Tadak Seotbab Room', note:'Petits plats coréens et riz.', lat:37.5345, lng:127.0005, q:'Tadak Tadak Seotbab Hannam' },
 
-    { s:'afternoon', k:'museum', m:1, name:'Leeum Museum of Art', note:'Ouvert le samedi 10h–18h, billetterie jusqu’à 17h30. Les réservations individuelles ouvrent 14 jours avant.', lat:37.5384, lng:126.9990, q:'Leeum Museum of Art Seoul' },
+    { s:'afternoon', k:'museum', m:1, b:'must', name:'Leeum Museum of Art', note:'Ouvert le samedi 10h–18h, billetterie jusqu’à 17h30. Les réservations individuelles ouvrent 14 jours avant : réserver dès l’ouverture de la fenêtre, c’est un jour férié.', lat:37.5384, lng:126.9990, q:'Leeum Museum of Art Seoul' },
     { s:'afternoon', k:'walk', name:'Itaewon', note:'En redescendant du musée.', lat:37.5345, lng:126.9945, q:'Itaewon Seoul' },
-    { s:'afternoon', k:'view', m:1, name:'Namsan · N Seoul Tower', note:'Montée pour le coucher du soleil. Pas indispensable de passer beaucoup de temps dans l’observatoire : la promenade et les vues suffisent.', lat:37.5512, lng:126.9882, q:'N Seoul Tower' },
+    { s:'afternoon', k:'view', m:1, name:'Namsan · N Seoul Tower', note:'Montée pour le coucher du soleil, mais partir assez tôt : jour férié, il y aura du monde et de la file au téléphérique. Pas indispensable de passer du temps dans l’observatoire, la promenade et les vues suffisent.', lat:37.5512, lng:126.9882, q:'N Seoul Tower' },
 
     { s:'evening', k:'food', m:1, name:'Namyeongdon', note:'Korean BBQ.', lat:37.5405, lng:126.9721, q:'Namyeongdon Seoul BBQ' },
     { s:'evening', k:'bar', name:'Southside Parlor', note:'Cocktails, ambiance détendue. Ouvert tard le samedi.', lat:37.5340, lng:126.9930, q:'Southside Parlor Seoul' },
@@ -335,6 +374,9 @@ const TRIP = {
 { date: '2026-10-04', city: 'Séoul → vol', region: 'KR', label: 'Mangwon · Yeonnam · départ',
   focus: 'Dernière demi-journée simple et locale, sans partir à l’autre bout de Séoul.',
   hotel: 2,
+  alert: 'Départ vers Incheon à 15h30 — heure cible fixe pour un vol à 20h05.',
+  drop: ['Taecho BBQ', 'Boutiques de Hongdae'],
+  tip: 'C’est l’AREX All Stop (train tous arrêts) qui dessert Hongik University — l’Express ne part que de Seoul Station. Ne visez pas l’Express depuis Hongdae.',
   stops: [
     { s:'morning', k:'market', m:1, t:'10:00', name:'Mangwon Market', note:'Annoncé tous les jours environ 10h–21h, même si les horaires varient selon les stands.', lat:37.5560, lng:126.9030, q:'Mangwon Market Seoul' },
     { s:'morning', k:'walk', name:'Mangwon-dong', note:'Puis retour vers Hongdae / Yeonnam.', lat:37.5555, lng:126.9020, q:'Mangwon-dong Seoul' },
@@ -344,8 +386,8 @@ const TRIP = {
     { s:'lunch', k:'food', name:'Mangwon Market food crawl', note:'Déjeuner sur le pouce entre les stands.', lat:37.5560, lng:126.9030, q:'Mangwon Market food' },
     { s:'lunch', k:'food', o:1, name:'Taecho BBQ', note:'Alternative pour un vrai dernier Korean BBQ.', lat:37.5565, lng:126.9040, q:'Taecho BBQ Mangwon' },
 
-    { s:'afternoon', k:'walk', name:'Dernière balade · récupération des bagages', note:'Début d’après-midi.', lat:37.5553, lng:126.9233, q:'Nine Brick Hotel Hongdae' },
-    { s:'afternoon', k:'transit', m:1, t:'15:30', name:'AREX · Hongik Univ. → Incheon', note:'Départ vers 15h30–16h00. Depuis Hongdae, l’AREX est particulièrement pratique.', lat:37.5570, lng:126.9245, q:'Hongik University Station AREX' },
+    { s:'afternoon', k:'walk', name:'Dernière balade · récupération des bagages', note:'Début d’après-midi, à boucler pour 15h15.', lat:37.5553, lng:126.9233, q:'Nine Brick Hotel Hongdae' },
+    { s:'afternoon', k:'transit', m:1, t:'15:30', name:'AREX All Stop · Hongik Univ. → Incheon T1', note:'Heure de départ ferme, pas une fourchette : 15h30 pour un vol à 20h05. Prendre l’AREX All Stop (train tous arrêts) — c’est le seul qui dessert Hongik University. L’AREX Express ne part que de Seoul Station. Compter environ 55 min jusqu’au Terminal 1.', lat:37.5570, lng:126.9245, q:'Hongik University Station AREX' },
 
     { s:'evening', k:'plane', m:1, t:'20:05', name:'CX419 · Incheon T1 → Hong Kong T1', note:'Départ 20h05, arrivée 23h00. Durée 3h55. Economy Light, 1 pièce en soute. Correspondance à Hong Kong : 1h25, même terminal.', lat:37.4490, lng:126.4505, q:'Incheon International Airport Terminal 1' }
   ]},
@@ -353,6 +395,7 @@ const TRIP = {
 /* ── 5 OCT ────────────────────────────────────────────────────────────── */
 { date: '2026-10-05', city: 'Retour', region: 'HK', label: 'Hong Kong → Zurich',
   focus: 'Correspondance de nuit, arrivée à Zurich lundi matin.', hotel: null,
+  tip: 'Correspondance de 1h25 à Hong Kong, même terminal.',
   stops: [
     { s:'morning', k:'plane', m:1, t:'00:25', name:'CX383 · Hong Kong T1 → Zurich', note:'Départ 00h25, arrivée 07h30. Durée 13h05. Economy Light, 1 pièce en soute. Arrivée à Zurich lundi 5 octobre à 07h30.', lat:22.3080, lng:113.9185, q:'Hong Kong International Airport Terminal 1' }
   ]}

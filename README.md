@@ -15,7 +15,9 @@ over HTTPS and install it to the home screen.
 | **Map** | One interactive map per day with numbered pins in itinerary order and a dashed route line. Sticky under the header on mobile, full-height side panel on desktop. |
 | **Two-way focus** | Tap a stop → its pin highlights and the map flies to it. Tap a pin → the itinerary row scrolls into view, flashes, and expands. |
 | **Smart framing** | Airports and cross-country legs are grouped out of the default fit, so a 30 km outlier doesn't flatten the day. The crosshair button lights up when stops sit outside the view and toggles between the main area and all points. |
-| **Navigation links** | One-tap **Navigate** and **Google Maps** on every stop, plus **Naver** in Korea and **Baidu** in Shenzhen, where Google Maps is not usable. |
+| **Navigation, per country** | Hong Kong leads with **Google Maps**. Korea leads with **Naver Map**, Google Maps kept alongside it. Shenzhen has no usable Western map, so the primary actions are **DiDi** and **Alipay**: they copy the stop's Chinese name to the clipboard to paste as the destination, with **Baidu** to look the place up. |
+| **Day briefing** | Every day carries three compact rows above the map — **Must book**, **Drop first if late** and **Transport tip** — plus an accent banner on the days that need one (Fire Dragon timing, the 30 Sep clock, Gyeongbokgung, the 3 Oct public holiday, the 15:30 airport departure). Tap the card to expand. |
+| **Booking state** | Stops show a **Must book** or **Booked** badge, so the reservations you still owe are visible in the timeline, not only in the practical sheet. |
 | **Fullscreen map** | Expand button or `F`. Day nav stays available and a swipeable card rail along the bottom walks the stops. |
 | **Filters** | All · Must · Eat & drink · Saved · To do — applied to the list and the map together. |
 | **Progress** | Tap a stop's number to mark it done. Progress shows per day in the day strip, the header and the bottom bar. |
@@ -45,12 +47,24 @@ Editing the trip means editing `assets/js/data.js` only — everything else is d
 from it. A stop is:
 
 ```js
-{ s:'afternoon', k:'museum', m:1, t:'19:00', name:'…', note:'…', lat:…, lng:…, q:'search text' }
-//  slot         kind        must  time                                        Maps query
+{ s:'afternoon', k:'museum', m:1, b:'must', t:'19:00', name:'…', note:'…',
+  lat:…, lng:…, q:'search text', zh:'中文名' }
+//  slot  kind  must  booking  time                    Maps query   DiDi/Alipay destination
 ```
 
 Kinds: `sight food cafe bar shop museum nature market view walk hotel transit plane`.
 Add `o:1` for an optional/alternative stop (dashed pin, "Option" tag).
+`b:'must'` / `b:'ok'` drive the booking badge. `zh` is the Chinese destination the
+Shenzhen DiDi and Alipay buttons copy — Shenzhen stops without one fall back to the name.
+
+A day also carries the briefing fields, all optional:
+
+```js
+alert: 'accent banner across the top of the day',
+book:  ['what still needs reserving'],
+drop:  ['what to cut first if you fall behind'],
+tip:   'how to actually move between these stops'
+```
 
 ## Map data
 

@@ -86,10 +86,43 @@ const icon = (id, cls = 'ico') => `<svg class="${cls}" aria-hidden="true"><use h
 
 function mapsSearch(st){ return `https://www.google.com/maps/search/?api=1&query=${enc(st.q)}`; }
 function mapsNav(st){ return `https://www.google.com/maps/dir/?api=1&destination=${enc(st.q)}`; }
-function localMaps(st){
-  if (st.region === 'KR') return { label:'Naver', url:`https://map.naver.com/p/search/${enc(st.q)}` };
-  if (st.region === 'CN') return { label:'Baidu', url:`https://map.baidu.com/search/${enc(st.q)}` };
-  return null;
+/* Navigation differs by country, so the buttons do too:
+   HK  — Google Maps is reliable, so it leads.
+   KR  — Naver Map leads (Google can't route in Korea); Google stays as a second opinion.
+   CN  — Google and Naver are both useless; what you actually need is the Chinese
+         destination in your clipboard to paste into DiDi or Alipay, plus Baidu to look it up. */
+function actionsFor(st){
+  const gs   = { label:'Google Maps', url: mapsSearch(st), icon:'i-pin' };
+  const gnav = { label:'Navigate',    url: mapsNav(st),    icon:'i-nav', primary:true };
+
+  if (st.region === 'KR') return [
+    { label:'Naver Map', url:`https://map.naver.com/p/search/${enc(st.q)}`, icon:'i-nav', primary:true },
+    gs
+  ];
+  if (st.region === 'CN'){
+    const zh = st.zh || st.name;
+    return [
+      { label:'DiDi',   copy: zh, icon:'i-copy', primary:true,
+        toast:`${zh} copié · collez la destination dans DiDi` },
+      { label:'Alipay', copy: zh, icon:'i-copy',
+        toast:`${zh} copié · Alipay › Transport › DiDi` },
+      { label:'Baidu',  url:`https://map.baidu.com/search/${enc(zh)}`, icon:'i-pin' },
+      gs
+    ];
+  }
+  return [gnav, gs];
+}
+
+async function copyText(t){
+  try { await navigator.clipboard.writeText(t); return true; }
+  catch(e){
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = t; ta.setAttribute('readonly',''); ta.style.cssText = 'position:fixed;top:-999px';
+      document.body.appendChild(ta); ta.select();
+      const ok = document.execCommand('copy'); ta.remove(); return ok;
+    } catch(e2){ return false; }
+  }
 }
 
 /* progress of a day = done stops / total stops */
@@ -153,6 +186,21 @@ function paintFilters(){
 }
 
 /* ── day head ────────────────────────────────────────────────────────── */
+/* Must book · Drop first if late · Transport tip — the three things
+   that are more useful on the ground than another place to visit. */
+function dayBlocks(d){
+  const rows = [];
+  if (d.alert) rows.push(`<p class="dbl warn">${icon('i-alert')}<span>${esc(d.alert)}</span></p>`);
+  const line = (k, cls, v) => rows.push(
+    `<p class="dbl"><b class="${cls}">${k}</b><span>${esc(v)}</span></p>`);
+  if (d.book && d.book.length) line('Must book', 'k-book', d.book.join(' · '));
+  if (d.drop && d.drop.length) line('Drop first', 'k-drop', d.drop.join(' · '));
+  if (d.tip)                   line('Transport', 'k-tip',  d.tip);
+  if (!rows.length) return '';
+  return `<div class="dblocks" id="dblocks" role="button" tabindex="0"
+            aria-label="Notes du jour, toucher pour développer">${rows.join('')}</div>`;
+}
+
 function paintHead(){
   const d = TRIP.days[S.di];
   const h = d.hotel != null ? TRIP.hotels[d.hotel] : null;
@@ -173,10 +221,17 @@ function paintHead(){
       ${h ? `<a class="mchip go" href="${mapsSearch(h)}" target="_blank" rel="noopener"
               title="${esc(h.name)}">${icon('k-hotel')}<b>${esc(h.short || h.name)}</b></a>` : ''}
       <span class="mchip">${icon('i-check')}${p.n}<span style="color:var(--ink-3)">/${p.t}</span></span>
-    </div>`;
+    </div>
+    ${dayBlocks(d)}`;
 
   const fx = document.getElementById('dhFocus');
   fx && fx.addEventListener('click', () => fx.classList.toggle('more'));
+  const db = document.getElementById('dblocks');
+  if (db){
+    const t = () => db.classList.toggle('open');
+    db.addEventListener('click', t);
+    db.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); t(); } });
+  }
 
   els.bbTitle.textContent = d.label;
   els.bbSub.textContent = `${d.city} · ${p.n}/${p.t}`;
@@ -199,7 +254,6 @@ function stopHTML(st){
   const [klabel, kicon] = KIND[st.k] || KIND.sight;
   const done = store.is('done', st.id), fav = store.is('fav', st.id);
   const cls = ['stop', st.o ? 'opt':'', done ? 'done':'', fav ? 'fav':'', S.sel === st.id ? 'sel open':''].join(' ');
-  const lm = localMaps(st);
   return `<li class="${cls}" data-id="${st.id}" id="stop-${st.id.replace('.','-')}">
     <div class="stop-row">
       <button class="numwrap" data-act="done" aria-label="Marquer ${esc(st.name)} comme fait" aria-pressed="${done}">
@@ -211,6 +265,8 @@ function stopHTML(st){
           <span class="nm">${esc(st.name)}</span>
           ${st.m ? '<span class="tag must">Must</span>' : ''}
           ${st.o ? '<span class="tag opt">Option</span>' : ''}
+          ${st.b === 'must' ? '<span class="tag book">Must book</span>' : ''}
+          ${st.b === 'ok'   ? '<span class="tag booked">Booked</span>'  : ''}
         </span>
         <span class="l2">${icon(kicon)}<span class="txt">${esc(klabel)}${st.note ? `<span class="nt"> · ${esc(st.note)}</span>` : ''}</span></span>
       </button>
@@ -220,10 +276,12 @@ function stopHTML(st){
     </div>
     <div class="stop-x">
       ${st.note ? `<p>${esc(st.note)}</p>` : ''}
+      ${st.region === 'CN' ? `<p class="hint">Les boutons DiDi et Alipay copient le nom chinois : collez-le comme destination dans l’app DiDi, ou dans le mini-programme DiDi d’Alipay ou WeChat.</p>` : ''}
       <div class="acts">
-        <a class="act primary" href="${mapsNav(st)}" target="_blank" rel="noopener">${icon('i-nav')}Navigate</a>
-        <a class="act" href="${mapsSearch(st)}" target="_blank" rel="noopener">${icon('i-pin')}Google Maps</a>
-        ${lm ? `<a class="act" href="${lm.url}" target="_blank" rel="noopener">${icon('i-pin')}${lm.label}</a>` : ''}
+        ${actionsFor(st).map(a => a.copy
+          ? `<button class="act ${a.primary?'primary':''}" data-copy="${esc(a.copy)}" data-toast="${esc(a.toast||'Copié')}">${icon(a.icon)}${esc(a.label)}</button>`
+          : `<a class="act ${a.primary?'primary':''}" href="${a.url}" target="_blank" rel="noopener">${icon(a.icon)}${esc(a.label)}</a>`
+        ).join('')}
         <button class="act ${done?'on':''}" data-act="done">${icon('i-check')}${done ? 'Done' : 'Mark done'}</button>
         <button class="act ${fav?'on':''}" data-act="fav">${icon('i-star')}${fav ? 'Saved' : 'Save'}</button>
       </div>
@@ -526,7 +584,14 @@ function savedSheet(){
 }
 
 /* ── events ──────────────────────────────────────────────────────────── */
-els.timeline.addEventListener('click', e => {
+els.timeline.addEventListener('click', async e => {
+  const cp = e.target.closest('[data-copy]');
+  if (cp){
+    const ok = await copyText(cp.dataset.copy);
+    buzz(8);
+    toast(ok ? cp.dataset.toast : `Copie impossible · ${cp.dataset.copy}`);
+    return;
+  }
   const btn = e.target.closest('[data-act]');
   if (!btn) return;
   const li = btn.closest('.stop'); if (!li) return;
