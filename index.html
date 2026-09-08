@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<title>Hong Kong → Korea · 22 Sep – 4 Oct 2026</title>
+<meta name="description" content="Itinéraire jour par jour — Hong Kong, Shenzhen, Busan, Séoul.">
+<meta name="theme-color" content="#FAF9F7" media="(prefers-color-scheme:light)">
+<meta name="theme-color" content="#0E0F12" media="(prefers-color-scheme:dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="HK→KR">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<link rel="stylesheet" href="assets/vendor/leaflet.css">
+<link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+
+<svg class="sr" aria-hidden="true" width="0" height="0">
+  <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="M14.5 4 7 12l7.5 8"/></symbol>
+  <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9.5 4 17 12l-7.5 8"/></symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24"><path d="M3.5 9V3.5H9M15 3.5h5.5V9M20.5 15v5.5H15M9 20.5H3.5V15"/></symbol>
+  <symbol id="i-compress" viewBox="0 0 24 24"><path d="M9 3.5V9H3.5M20.5 9H15V3.5M15 20.5V15h5.5M3.5 15H9v5.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.5 9.5 17.5 19.5 6.5"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.6 2.6 5.5 5.9.8-4.3 4.2 1 6-5.2-2.8-5.2 2.8 1-6L3.5 9.9l5.9-.8z"/></symbol>
+  <symbol id="i-nav" viewBox="0 0 24 24"><path d="M20.5 3.5 3.5 10.7l7.3 2.5 2.5 7.3z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21.5s7-6.2 7-11.1A7 7 0 0 0 5 10.4c0 4.9 7 11.1 7 11.1Z"/><circle cx="12" cy="10.2" r="2.5"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.7"/><path d="M12 11v5.5M12 7.7v.6"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M5.5 5.5 18.5 18.5M18.5 5.5 5.5 18.5"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M4 6.5h16M4 12h16M4 17.5h11"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.4"/><path d="M12 1.8v2.6M12 19.6v2.6M22.2 12h-2.6M4.4 12H1.8"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 7v5.3l3.4 2"/></symbol>
+  <!-- kinds -->
+  <symbol id="k-sight" viewBox="0 0 24 24"><path d="M4 20.5h16M6 20.5V10M18 20.5V10M10 20.5V10M14 20.5V10M3.4 10h17.2L12 3.6 3.4 10Z"/></symbol>
+  <symbol id="k-food" viewBox="0 0 24 24"><path d="M6.5 3v7.5a2 2 0 0 0 4 0V3M8.5 10.5v10M17.5 3c-1.7 1-2.6 3-2.6 5.4 0 1.6.8 2.6 2.6 2.8V21"/></symbol>
+  <symbol id="k-cafe" viewBox="0 0 24 24"><path d="M4.5 7.5h12v6.2a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5V7.5ZM16.5 9h1.6a2.6 2.6 0 0 1 0 5.2h-1.6M4 22h13"/></symbol>
+  <symbol id="k-bar" viewBox="0 0 24 24"><path d="M4 4h16l-8 8.4V20M8 20h8M9.5 8.2h5"/></symbol>
+  <symbol id="k-shop" viewBox="0 0 24 24"><path d="M4.6 8h14.8l-1.1 12.5H5.7L4.6 8ZM8.6 10.4V6.6a3.4 3.4 0 0 1 6.8 0v3.8"/></symbol>
+  <symbol id="k-museum" viewBox="0 0 24 24"><path d="M3.6 20.5h16.8M5.5 20.5V10.4M18.5 20.5V10.4M9.8 20.5V10.4M14.2 20.5V10.4M3.6 10.4h16.8L12 4l-8.4 6.4Z"/></symbol>
+  <symbol id="k-nature" viewBox="0 0 24 24"><path d="M2.8 19.5h18.4M5.5 19.5l6.5-13 6.5 13M8.6 13.2h6.8"/></symbol>
+  <symbol id="k-market" viewBox="0 0 24 24"><path d="M3.5 9.2h17l-1.3 11.3H4.8L3.5 9.2ZM3.5 9.2 6 3.5h12l2.5 5.7M9 13.2v3.6M15 13.2v3.6"/></symbol>
+  <symbol id="k-view" viewBox="0 0 24 24"><path d="M2.5 12s3.6-6.2 9.5-6.2S21.5 12 21.5 12s-3.6 6.2-9.5 6.2S2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="2.8"/></symbol>
+  <symbol id="k-walk" viewBox="0 0 24 24"><circle cx="13" cy="4.4" r="1.9"/><path d="M11.2 21 13 15.2l-2.6-2.8.9-4.5-3.6 2.2-1 3.3M13 15.2l3 2.2 1.2 3.6M9.7 7.9 14 8.4l2.4 3.1 2.9.7"/></symbol>
+  <symbol id="k-hotel" viewBox="0 0 24 24"><path d="M3 20V6M3 12.5h18V20M3 20h18M7.5 9.8h3.2M21 20v-3"/><circle cx="7.4" cy="9.6" r="0"/></symbol>
+  <symbol id="k-transit" viewBox="0 0 24 24"><path d="M6 3.5h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2ZM4 9.5h16M8 20.5l-2 2M16 20.5l2 2M7.6 13.2h.01M16.4 13.2h.01M4 16.5v2.2a1.8 1.8 0 0 0 1.8 1.8h12.4a1.8 1.8 0 0 0 1.8-1.8v-2.2"/></symbol>
+  <symbol id="k-plane" viewBox="0 0 24 24"><path d="M10.5 20.5 12 15l7.5-2.2a2 2 0 0 0-.6-3.9l-5.5.7-3.3-6.1H8.3l1.6 6.6-3.9.5-1.9-2.6H2.6l1.5 4.2-1.5 4.2h1.5l1.9-2.6 3.9.5-1.6 6.6h1.8Z"/></symbol>
+</svg>
+
+<div class="app">
+
+  <header class="topbar">
+    <div class="tb">
+      <div class="brand">
+        <b>Hong&nbsp;Kong → Korea</b>
+        <span id="brandSub">22 sep – 4 oct 2026</span>
+      </div>
+      <div class="tb-acts">
+        <button class="chip-today" id="btnToday" hidden><span class="dot"></span>Today</button>
+        <button class="iconbtn" id="btnSaved" aria-pressed="false" title="Favoris (S)" aria-label="Voir les favoris">
+          <svg class="ico"><use href="#i-star"/></svg></button>
+        <button class="iconbtn" id="btnInfo" title="Vols, hôtels, réservations" aria-label="Infos pratiques">
+          <svg class="ico"><use href="#i-info"/></svg></button>
+      </div>
+    </div>
+    <nav class="daystrip" id="daystrip" role="tablist" aria-label="Jours du voyage"></nav>
+  </header>
+
+  <main class="main">
+    <div class="col">
+      <div class="lane-a">
+        <header class="dayhead" id="dayhead"></header>
+        <div class="filters" id="filters" role="group" aria-label="Filtres"></div>
+        <div id="timeline"></div>
+      </div>
+      <aside class="lane-b" id="laneB" aria-hidden="true"></aside>
+    </div>
+  </main>
+
+  <!-- the single map card, moved between lanes by JS -->
+  <div class="mapcard" id="mapcard">
+    <div class="map" id="map" role="application" aria-label="Carte du jour"></div>
+    <div class="mapbar">
+      <button class="mapbtn" id="btnFull" title="Plein écran" aria-label="Carte plein écran">
+        <svg class="ico"><use href="#i-expand"/></svg></button>
+      <button class="mapbtn" id="btnFit" title="Recadrer" aria-label="Recadrer sur le jour">
+        <svg class="ico"><use href="#i-target"/></svg></button>
+    </div>
+    <div class="maplegend" id="maplegend"></div>
+  </div>
+  <div class="mapdock" id="mapdock"></div>
+
+  <nav class="botbar">
+    <button class="nav-b" id="btnPrev" aria-label="Jour précédent"><svg class="ico"><use href="#i-chev-l"/></svg></button>
+    <div class="bb-mid">
+      <div class="t" id="bbTitle">—</div>
+      <div class="s" id="bbSub">—</div>
+      <div class="bar"><i id="bbBar"></i></div>
+    </div>
+    <button class="nav-b" id="btnNext" aria-label="Jour suivant"><svg class="ico"><use href="#i-chev-r"/></svg></button>
+  </nav>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" aria-hidden="true">
+  <div class="sheet-grab"></div>
+  <div class="sheet-h">
+    <h2 id="sheetTitle">Pratique</h2>
+    <button class="iconbtn" id="btnSheetClose" aria-label="Fermer"><svg class="ico"><use href="#i-close"/></svg></button>
+  </div>
+  <div id="sheetBody"></div>
+</section>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/vendor/leaflet.js" defer></script>
+<script src="assets/js/data.js" defer></script>
+<script src="assets/js/app.js" defer></script>
+</body>
+</html>

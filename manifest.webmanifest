@@ -1,0 +1,19 @@
+{
+  "name": "Hong Kong → Korea · 2026",
+  "short_name": "HK→KR",
+  "description": "Itinéraire jour par jour — Hong Kong, Shenzhen, Busan, Séoul. 22 sep – 4 oct 2026.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#FAF9F7",
+  "theme_color": "#FAF9F7",
+  "lang": "fr",
+  "categories": ["travel", "navigation"],
+  "icons": [
+    { "src": "assets/icons/icon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "assets/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
